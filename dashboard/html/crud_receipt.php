@@ -5,17 +5,24 @@ $case = $_GET['xCase'];
 if ($case == '1') {
     $header = 'บันทึกค่าใช้จ่ายโครงการ';
     $id = '';
-    $result = mysqli_query($conn, "SELECT * FROM project WHERE void = 0");
+    $result_ = mysqli_query($conn, "SELECT * FROM project WHERE void = 0");
 } else if ($case  == '2') {
     $header = 'Edit';
     $id = $_GET['id'];
-    $result = mysqli_query($conn, "SELECT * FROM customer WHERE cus_id ='$id' ");
+    $result = mysqli_query($conn, "SELECT * FROM project_hd WHERE headcode ='$id' ");
+    $result_ = mysqli_query($conn, "SELECT * FROM project JOIN customer USING(cus_id) WHERE project_id AND project.void = 0");
     $row = mysqli_fetch_array($result);
     // print_r(md5($row['password']));
 } else if ($case  == '3') {
     $header = 'Delete';
     $id = $_GET['id'];
-    $result = mysqli_query($conn, "SELECT * FROM customer WHERE cus_id ='$id' ");
+    $result = mysqli_query($conn, "SELECT * FROM project_hd WHERE headcode ='$id' ");
+    $row = mysqli_fetch_array($result);
+} else if ($case  == '4') {
+    $header = 'Profile';
+    $id = $_GET['id'];
+    $result = mysqli_query($conn, "SELECT * FROM project_hd WHERE headcode ='$id' ");
+    $result_ = mysqli_query($conn, "SELECT * FROM project JOIN customer USING(cus_id) WHERE project_id AND project.void = 0");
     $row = mysqli_fetch_array($result);
 }
 
@@ -53,7 +60,7 @@ if ($case == '1') {
                     <!-- /.content-header -->
                     <div class="row">
                         <div class="col-12 order-2 order-md-3 order-lg-2 mb-4">
-                            <div class="card">
+                            <div class="card mb-3">
                                 <div class="card-header text-center">
                                     <h3><?php echo $header; ?></h3>
                                 </div>
@@ -79,10 +86,10 @@ if ($case == '1') {
                                             </div>
                                             <div class="mb-2 col-lg-4 col-md-6 col-ms-12">
                                                 <label for="datereceipt" class="form-label">ชื่อโครงการ</label>
-                                                <select class="form-select" aria-label="Default select example" name="project_id" id="project_id" <?php echo ($case == '3' || $case == '4') ? 'disabled' : 'required' ?>>
+                                                <select class="form-select" aria-label="Default select example" name="project_id" id="project_id" value="<?php echo ($case == 1) ? '' : $row['project_id'] ?>" <?php echo ($case == '3') ? 'readonly' : 'required' ?>>
                                                     <option selected disabled>ชื่อโครงการ</option>
                                                     <?php
-                                                    foreach ($result as $rowselect) {
+                                                    foreach ($result_ as $rowselect) {
                                                         $isSelected = ($rowselect['project_id'] == $row['project_id']) ? 'selected' : '';
                                                     ?>
                                                         <option value="<?php echo $rowselect['project_id']; ?>" <?php echo $isSelected; ?>>
@@ -99,7 +106,7 @@ if ($case == '1') {
                                             </div>
                                             <div class="mb-2 col-lg-4 col-md-6 col-ms-12">
                                                 <label for="totalprice" class="form-label">มูลค่า</label>
-                                                <input type="text" class="form-control" name="totalprice" id="project_price_display"readonly>
+                                                <input type="text" class="form-control" name="totalprice" id="project_price_display" readonly>
                                             </div>
                                         </div>
                                         <div class="mt-2">
@@ -114,80 +121,123 @@ if ($case == '1') {
                                         </div>
                                     </form>
                                 </div>
+
                             </div>
+                            <div class="card">
+                                <div class="card-body">
+                                <form id="formAccountSettings" action="../../API/api_receipt.php?xCase=1&id=1" method="POST">
+                                <button type="button" onclick="addInputFields()">Add Row</button>
+                                    <table>
+                                        <tr>
+                                            <th>รหัสสินค้า</th>
+                                            <th>จำนวน</th>
+                                            <th>ราคา/หน่วย</th>
+                                            <th>จำนวนเงิน</th>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="text" name="s_id[]" placeholder="Enter an item"></td>
+                                            <td><input type="text" name="qty[]" placeholder="Enter data"></td>
+                                            <td><input type="text" name="s_price[]" placeholder="Enter header"></td>
+                                            <td><input type="text" name="totalprice[]" placeholder="Enter description"></td>
+                                        </tr>
+                                    </table>
+
+                                    <button type="submit" name="submit" value="Submit">submit</button>
+                                    </form>
+                                </div>
+                            </div>
+                            <!--/ Total Revenue -->
                         </div>
-                        <!--/ Total Revenue -->
                     </div>
-                </div>
-                <!-- / Content -->
+                    <!-- / Content -->
 
-                <script>
-                    // เลือกรหัสโครงการ
-                    var projectSelect = document.getElementById('project_id');
-                    // ช่องแสดงชื่อโครงการ
-                    var projectNameInput = document.getElementById('project_name_display');
-                    var projectNameInputID = document.getElementById('project_id_display');
-                    var projectNameInputprice = document.getElementById('project_price_display');
+                    <script>
+                        // เลือกรหัสโครงการ
+                        var projectSelect = document.getElementById('project_id');
+                        // ช่องแสดงชื่อโครงการ
+                        var projectNameInput = document.getElementById('project_name_display');
+                        var projectNameInputID = document.getElementById('project_id_display');
+                        var projectNameInputprice = document.getElementById('project_price_display');
 
-                    // ใช้ addEventListener เพื่อดักเหตุการณ์การเลือกรหัสโครงการ
-                    projectSelect.addEventListener('change', function() {
-                        // หาค่าที่ถูกเลือก
-                        var selectedOption = projectSelect.options[projectSelect.selectedIndex];
-                        var selectedProjectID = selectedOption.value; // รหัสโครงการที่ถูกเลือก
+                        // ใช้ addEventListener เพื่อดักเหตุการณ์การเลือกรหัสโครงการ
+                        projectSelect.addEventListener('change', function() {
+                            // หาค่าที่ถูกเลือก
+                            var selectedOption = projectSelect.options[projectSelect.selectedIndex];
+                            var selectedProjectID = selectedOption.value; // รหัสโครงการที่ถูกเลือก
 
-                        // ส่งคำขอ AJAX ไปยังเซิร์ฟเวอร์เพื่อดึงชื่อโครงการ
-                        $.ajax({
-                            url: '../../API/api_receipt.php?xCase=4&id=' + selectedProjectID,
-                            type: 'GET',
-                            success: function(data) {
-                                var projectData = JSON.parse(data);
-                                projectNameInputID.value = selectedOption.value;
-                                projectNameInput.value = projectData.project_fullname;
-                                projectNameInputprice.value = projectData.project_valueprice;
-                            }
+                            // ส่งคำขอ AJAX ไปยังเซิร์ฟเวอร์เพื่อดึงชื่อโครงการ
+                            $.ajax({
+                                url: '../../API/api_receipt.php?xCase=4&id=' + selectedProjectID,
+                                type: 'GET',
+                                success: function(data) {
+                                    var projectData = JSON.parse(data);
+                                    projectNameInputID.value = selectedOption.value;
+                                    projectNameInput.value = projectData.project_fullname;
+                                    projectNameInputprice.value = projectData.project_valueprice;
+                                }
+                            });
+
                         });
 
-                    });
-                </script>
+                        // multi insrt
+                        function addInputFields() {
+                            const table = document.querySelector('table');
+                            const newRow = document.createElement('tr');
 
-                <script>
-                    $(document).ready(function() {
-                        $("#formAccountSettings").submit(function(e) {
-                            e.preventDefault();
+                            const fieldNames = ['s_id', 'qty', 's_price', 'totalprice'];
 
-                            let formUrl = $(this).attr("action");
-                            let reqMethod = $(this).attr("method");
-                            let formData = $(this).serialize();
+                            for (let i = 0; i < fieldNames.length; i++) {
+                                const newCell = document.createElement('td');
+                                const newInput = document.createElement('input');
+                                newInput.type = 'text';
+                                newInput.name = `${fieldNames[i]}[]`;
+                                newInput.placeholder = `Enter ${fieldNames[i]}`;
+                                newCell.appendChild(newInput);
+                                newRow.appendChild(newCell);
+                            }
 
-                            $.ajax({
-                                url: formUrl,
-                                type: reqMethod,
-                                data: formData,
-                                success: function(data) {
-                                    // console.log("Success", data);
-                                    let result = JSON.parse(data);
+                            table.appendChild(newRow);
+                        }
+                    </script>
 
-                                    if (result.status == "success") {
-                                        // console.log("Success", result);
-                                        Swal.fire({
-                                            icon: result.status,
-                                            title: result.title,
-                                            text: result.message,
-                                            showConfirmButton: false,
-                                            timer: 2500
-                                        }).then(function() {
-                                            window.location.href = "receipt.php";
-                                        });
-                                    } else {
-                                        Swal.fire(result.title, result.message, result
-                                            .status)
+                    <script>
+                        $(document).ready(function() {
+                            $("#formAccountSettings").submit(function(e) {
+                                e.preventDefault();
+
+                                let formUrl = $(this).attr("action");
+                                let reqMethod = $(this).attr("method");
+                                let formData = $(this).serialize();
+
+                                $.ajax({
+                                    url: formUrl,
+                                    type: reqMethod,
+                                    data: formData,
+                                    success: function(data) {
+                                        // console.log("Success", data);
+                                        let result = JSON.parse(data);
+
+                                        if (result.status == "success") {
+                                            // console.log("Success", result);
+                                            Swal.fire({
+                                                icon: result.status,
+                                                title: result.title,
+                                                text: result.message,
+                                                showConfirmButton: false,
+                                                timer: 2500
+                                            }).then(function() {
+                                                window.location.href = "receipt.php";
+                                            });
+                                        } else {
+                                            Swal.fire(result.title, result.message, result
+                                                .status)
+                                        }
                                     }
-                                }
+                                })
                             })
                         })
-                    })
-                </script>
+                    </script>
 
-                <!-- Footer -->
-                <?php include("footer.php"); ?>
-                <!-- / Footer -->
+                    <!-- Footer -->
+                    <?php include("footer.php"); ?>
+                    <!-- / Footer -->

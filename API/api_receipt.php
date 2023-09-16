@@ -20,6 +20,31 @@ switch ($case) {
                 $id = $row['id'] + 1;
             }
         }
+        //multi insert detail
+        if (!empty($_POST['s_id'])) {
+            $s_ids = $_POST['s_id'];
+            $qtys = $_POST['qty'];
+            $s_prices = $_POST['s_price'];
+            $totalprices = $_POST['totalprice'];
+            for ($i = 0; $i < count($s_ids); $i++) {
+                $s_id = $s_ids[$i];
+                $qty = $qtys[$i];
+                $s_price = $s_prices[$i];
+                $totalprice = $totalprices[$i];
+                // Sanitize the input (to prevent SQL injection)
+                // $s_id = $conn->real_escape_string($s_id);
+                // Perform the SQL insert
+                // echo "s_id =" . $s_id ."<br>";
+                // echo "qtys =" . $qtys ."<br>";
+                // echo "s_price =" . $s_price ."<br>";
+                // echo "totalprice =" . $totalprice ."<br>";
+                $sql = "INSERT INTO project_desc (headcode, s_id, qty, s_price, totalprice) VALUES ('$id', '$s_id', '$qty', '$s_price', '$totalprice')";
+                if ($conn->query($sql) !== TRUE) {
+                    echo "Error: " . $sql . "<br>" . $conn->error;
+                }
+            }
+        }
+
 
         $spl = mysqli_query($conn, "INSERT INTO project_hd VALUES ('$id','$datesave','$receiptcode','$datereceipt','$project_id','$totalprice', 1 ,0)");
         if (!$spl) {
@@ -29,16 +54,14 @@ switch ($case) {
         }
         break;
     case 2: //Update
-        $project_name = $_POST['project_name'];
-        $cus_id = $_POST['cus_id'];
-        $project_start = $_POST['project_start'];
-        $project_end = $_POST['project_end'];
-        $project_valueprice = $_POST['project_valueprice'];
-        $emp_id = $_POST['emp_id'];
-        $project_status = $_POST['project_status'];
+        $datesave = $_POST['datesave'];
+        $receiptcode = $_POST['receiptcode'];
+        $datereceipt = $_POST['datereceipt'];
+        $project_id = $_POST['project_id'];
+        $totalprice = $_POST['totalprice'];
 
-        $spl = mysqli_query($conn, "UPDATE project SET project_name = '$project_name', cus_id = '$cus_id',project_start = '$project_start'
-        ,project_end = '$project_end',project_valueprice = '$project_valueprice', emp_id = '$emp_id', project_status = '$project_status' Where project_id = $id");
+        $spl = mysqli_query($conn, "UPDATE project_hd SET datesave = '$datesave', receiptcode = '$receiptcode',datereceipt = '$datereceipt'
+        ,project_id = '$project_id',totalprice = '$totalprice' Where project_id = $id");
         if (!$spl) {
             echo json_encode(array('title' => 'Unsuccessfully!', 'status' => 'error', 'message' => 'Inserted data is not success.'));
         } else {
@@ -47,7 +70,7 @@ switch ($case) {
         break;
     case 3:
         $id = $_GET['id'];
-        $spl = mysqli_query($conn, "UPDATE project SET void = '1' Where project_id = $id");
+        $spl = mysqli_query($conn, "UPDATE project_hd SET void = '1' Where headcode = $id");
         if (!$spl) {
             echo json_encode(array('title' => 'Unsuccessfully!', 'status' => 'error', 'message' => 'Inserted data is not success.'));
         } else {
@@ -73,9 +96,9 @@ switch ($case) {
             $projectData = [
                 'project_id' => $project_id,
                 'project_name' => $project_name,
-          
+
                 'project_fullname' => $project_fullname,
-             
+
                 'project_valueprice' => $project_valueprice
             ];
 

@@ -1,6 +1,6 @@
 <?php
 include("connect.php");
-$data = mysqli_query($conn, "SELECT * FROM `project_hd` JOIN project USING(project_id) WHERE project_hd.void = 0 ORDER BY headcode");
+$data = mysqli_query($conn, "SELECT * ,if(status = 0 ,'ยกเลิก','ปกติ') AS status  FROM `project_hd` JOIN project USING(project_id) WHERE project_hd.void = 0 ORDER BY headcode");
 
 include("header.php"); ?>
 
@@ -61,9 +61,9 @@ include("header.php"); ?>
                                                             <th><?php echo $row['status'] ?>
                                                             </th>
                                                             <td class="text-center">
-                                                                <a href="crud_project.php?xCase=4&id=<?php echo $row['headcode'] ?>" name="btn_view" class="btn btn-info"><i class="fa-solid fa-address-card"></i></a>
-                                                                <a href="crud_project.php?xCase=2&id=<?php echo $row['headcode'] ?>" name="btn_edit" class="btn btn-warning edit_sale"><i class="tf-icons bx bx-edit"></i></a>
-                                                                <a href="crud_project.php?xCase=3&id=<?php echo $row['headcode'] ?>" name="btn_delete" class="btn btn-danger"><i class="tf-icons bx bx-trash"></i></a>
+                                                                <a href="crud_receipt.php?xCase=4&id=<?php echo $row['headcode'] ?>" name="btn_view" class="btn btn-info"><i class="fa-solid fa-address-card"></i></a>
+                                                                <a href="crud_receipt.php?xCase=2&id=<?php echo $row['headcode'] ?>" name="btn_edit" class="btn btn-warning edit_sale"><i class="tf-icons bx bx-edit"></i></a>
+                                                                <a href="crud_receipt.php?xCase=3&id=<?php echo $row['headcode'] ?>" name="btn_delete" class="btn btn-danger"><i class="tf-icons bx bx-trash"></i></a>
                                                             </td>
                                                         </tr>
                                                 <?php
