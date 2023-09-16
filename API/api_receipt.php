@@ -55,12 +55,50 @@ switch ($case) {
         }
         break;
     case 4:
-        $id = $_GET['id'];
-        $spl = mysqli_query($conn, "SELECT * FROM project  Where project_id = $id");
-        if (!$spl) {
-            echo json_encode(array('title' => 'Unsuccessfully!', 'status' => 'error', 'message' => 'Inserted data is not success.'));
+        // $project_id = mysqli_real_escape_string($conn, $_GET['id']); // เปลี่ยน $_GET['id'] เป็น $_GET['project_id']
+
+        // // คำสั่ง SQL เพื่อดึงชื่อโครงการ
+        // $sql = "SELECT * FROM project JOIN customer USING(cus_id) WHERE project_id = '$project_id' AND project.void = 0";
+        // $result = mysqli_query($conn, $sql);
+
+        // if ($result) {
+        //     $row = mysqli_fetch_assoc($result);
+        //     $project_name = $row['project_name']; // เปลี่ยน $project_id เป็น $project_name
+        //     $project_id = $row['project_id'];
+        //     $cus_firstname = $row['cus_firstname'];
+        //     $cus_lastname = $row['cus_lastname'];
+        //     $project_valueprice = $row['project_valueprice'];
+        //     echo $cus_firstname." ".$cus_lastname;
+        // } else {
+        //     echo "ไม่สามารถดึงข้อมูลโครงการได้: " . mysqli_error($conn);
+        // }
+
+        $project_id = mysqli_real_escape_string($conn, $_GET['id']); // Correct the variable name to 'project_id'
+
+        // SQL query to fetch project details
+        $sql = "SELECT * FROM project JOIN customer USING(cus_id) WHERE project_id = '$project_id' AND project.void = 0";
+        $result = mysqli_query($conn, $sql);
+
+        if ($result) {
+            $row = mysqli_fetch_assoc($result);
+            $project_name = $row['project_name'];
+            $cus_firstname = $row['cus_firstname'];
+            $cus_lastname = $row['cus_lastname'];
+            $project_valueprice = $row['project_valueprice'];
+            $project_fullname = $cus_firstname . ' ' . $cus_lastname;
+
+            // Create an array to hold project data and echo it as JSON
+            $projectData = [
+                'project_id' => $project_id,
+                'project_name' => $project_name,
+          
+                'project_fullname' => $project_fullname,
+             
+                'project_valueprice' => $project_valueprice
+            ];
+
+            echo json_encode($projectData);
         } else {
-            echo json_encode(array('title' => 'Successfully!', 'status' => 'success', 'message' => 'Inserted data is successfully.'));
+            echo "ไม่สามารถดึงข้อมูลโครงการได้: " . mysqli_error($conn);
         }
-        break;
 }

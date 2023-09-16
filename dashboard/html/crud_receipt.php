@@ -73,15 +73,20 @@ if ($case == '1') {
                                                 <input type="date" class="form-control" name="datereceipt" id="datereceipt" placeholder="วันที่ใบเสร็จ" value="<?php echo ($case == 1) ? '' : $row['datereceipt'] ?>" <?php echo ($case == '3') ? 'readonly' : 'required' ?>>
                                             </div>
                                             <div class="mb-2 col-lg-4 col-md-6 col-ms-12">
-                                                <label for="datereceipt" class="form-label">รหัสโครงการ</label>
+                                                <label for="project_id" class="form-label">รหัสโครงการ</label>
+                                                <input type="text" class="form-control" id="project_id_display" placeholder="ชื่อโครงการ" disabled value="<?php echo ($case == 1) ? '' : $row['project_id'] ?>" <?php echo ($case == '3') ? 'readonly' : 'required' ?>>
+                                                <!-- <div id="project_name_display"></div> -->
+                                            </div>
+                                            <div class="mb-2 col-lg-4 col-md-6 col-ms-12">
+                                                <label for="datereceipt" class="form-label">ชื่อโครงการ</label>
                                                 <select class="form-select" aria-label="Default select example" name="project_id" id="project_id" <?php echo ($case == '3' || $case == '4') ? 'disabled' : 'required' ?>>
-                                                    <option selected disabled>รหัสโครงการ</option>
+                                                    <option selected disabled>ชื่อโครงการ</option>
                                                     <?php
                                                     foreach ($result as $rowselect) {
                                                         $isSelected = ($rowselect['project_id'] == $row['project_id']) ? 'selected' : '';
                                                     ?>
                                                         <option value="<?php echo $rowselect['project_id']; ?>" <?php echo $isSelected; ?>>
-                                                            <?php echo $rowselect['project_id']; ?> 
+                                                            <?php echo $rowselect['project_name']; ?>
                                                         </option>
                                                     <?php
                                                     }
@@ -89,24 +94,12 @@ if ($case == '1') {
                                                 </select>
                                             </div>
                                             <div class="mb-2 col-lg-4 col-md-6 col-ms-12">
-                                                <label for="project_name" class="form-label">ชื่อโครงการ</label>
-                                                <input type="text" class="form-control" name="project_name" id="project_name" placeholder="ชื่อโครงการ" value="<?php echo ($case == 1) ? '' : $row['project_name'] ?>" <?php echo ($case == '3') ? 'readonly' : 'required' ?>>
+                                                <label for="cus_id" class="form-label">ชื่อลูกค้า</label>
+                                                <input type="text" class="form-control" name="cus_id" id="project_name_display" placeholder="" disabled>
                                             </div>
                                             <div class="mb-2 col-lg-4 col-md-6 col-ms-12">
-                                                <label for="cus_province" class="form-label">จังหวัด</label>
-                                                <input type="text" class="form-control" name="cus_province" id="cus_province" placeholder="จังหวัด" value="<?php echo ($case == 1) ? '' : $row['cus_province'] ?>" <?php echo ($case == '3') ? 'readonly' : 'required' ?>>
-                                            </div>
-                                            <div class="mb-2 col-lg-4 col-md-6 col-ms-12">
-                                                <label for="cus_postcode" class="form-label">ไปรษณีย์</label>
-                                                <input type="text" class="form-control" name="cus_postcode" id="cus_postcode" placeholder="ไปรษณีย์" value="<?php echo ($case == 1) ? '' : $row['cus_postcode'] ?>" <?php echo ($case == '3') ? 'readonly' : 'required' ?>>
-                                            </div>
-                                            <div class="mb-2 col-lg-4 col-md-6 col-ms-12">
-                                                <label for="cus_phone" class="form-label">เบอร์โทรศัพท์</label>
-                                                <input type="text" class="form-control" name="cus_phone" id="cus_phone" placeholder="เบอร์โทรศัพท์" value="<?php echo ($case == 1) ? '' : $row['cus_phone'] ?>" <?php echo ($case == '3') ? 'readonly' : 'required' ?>>
-                                            </div>
-                                            <div class="mb-2 col-lg-4 col-md-6 col-ms-12">
-                                                <label for="cus_email" class="form-label">อีเมล</label>
-                                                <input type="email" class="form-control" name="cus_email" id="cus_email" placeholder="อีเมล" value="<?php echo ($case == 1) ? '' : $row['cus_email'] ?>" <?php echo ($case == '3') ? 'readonly' : 'required' ?>>
+                                                <label for="totalprice" class="form-label">มูลค่า</label>
+                                                <input type="text" class="form-control" name="totalprice" id="project_price_display" value="project_price_display" placeholder="" disabled>
                                             </div>
                                         </div>
                                         <div class="mt-2">
@@ -129,31 +122,31 @@ if ($case == '1') {
                 <!-- / Content -->
 
                 <script>
-                    document.getElementById('project_id').addEventListener('change', function() {
-                        var select = this;
-                        var selectedOption = select.options[select.selectedIndex];
-                        var projectNameInput = document.getElementById('project_name');
+                    // เลือกรหัสโครงการ
+                    var projectSelect = document.getElementById('project_id');
+                    // ช่องแสดงชื่อโครงการ
+                    var projectNameInput = document.getElementById('project_name_display');
+                    var projectNameInputID = document.getElementById('project_id_display');
+                    var projectNameInputprice = document.getElementById('project_price_display');
 
-                        if (selectedOption) {
-                            var projectId = selectedOption.value; // รหัสโครงการที่เลือก
+                    // ใช้ addEventListener เพื่อดักเหตุการณ์การเลือกรหัสโครงการ
+                    projectSelect.addEventListener('change', function() {
+                        // หาค่าที่ถูกเลือก
+                        var selectedOption = projectSelect.options[projectSelect.selectedIndex];
+                        var selectedProjectID = selectedOption.value; // รหัสโครงการที่ถูกเลือก
 
-                            // ส่งคำขอ HTTP ไปยังไฟล์ PHP เพื่อดึงชื่อโครงการ
-                            fetch('../../API/api_receipt.php?xCase=4&id=' + projectId)
-                                .then(function(response) {
-                                    return response.json();
-                                })
-                                .then(function(data) {
-                                    // เมื่อได้ข้อมูลชื่อโครงการ
-                                    projectNameInput.value = data.projectName; // แทนด้วยชื่อที่ได้จากข้อมูล
-                                })
-                                .catch(function(error) {
-                                    console.error('เกิดข้อผิดพลาดในการดึงข้อมูล: ' + error);
-                                    console.error(projectNameInput);
-                                });
-                        } else {
-                            // หากไม่มีตัวเลือกที่ถูกเลือก ให้ชื่อโครงการว่างเปล่า
-                            projectNameInput.value = '';
-                        }
+                        // ส่งคำขอ AJAX ไปยังเซิร์ฟเวอร์เพื่อดึงชื่อโครงการ
+                        $.ajax({
+                            url: '../../API/api_receipt.php?xCase=4&id=' + selectedProjectID,
+                            type: 'GET',
+                            success: function(data) {
+                                var projectData = JSON.parse(data);
+                                projectNameInputID.value = selectedOption.value;
+                                projectNameInput.value = projectData.project_fullname;
+                                projectNameInputprice.value = projectData.project_valueprice;
+                            }
+                        });
+
                     });
                 </script>
 
