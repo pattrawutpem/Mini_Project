@@ -110,7 +110,7 @@ if ($case == '1') {
                                                         '<button type="submit" name="submit_frm" class="btn btn-danger">Delete</button>' : ''))
                                             ?>
                                             <!-- <button type="submit" name="submit" class="btn btn-success">บันทึก</button> -->
-                                            <a href="customer.php" class="btn btn-secondary ms-3">Cancel</a>
+                                            <a href="receipt.php" class="btn btn-secondary ms-3">Cancel</a>
                                         </div>
                                     </form>
                                 </div>
