@@ -74,7 +74,7 @@ if ($case == '1') {
                                             </div>
                                             <div class="mb-2 col-lg-4 col-md-6 col-ms-12">
                                                 <label for="project_id" class="form-label">รหัสโครงการ</label>
-                                                <input type="text" class="form-control" id="project_id_display" placeholder="ชื่อโครงการ" disabled value="<?php echo ($case == 1) ? '' : $row['project_id'] ?>" <?php echo ($case == '3') ? 'readonly' : 'required' ?>>
+                                                <input type="text" class="form-control" id="project_id_display" placeholder="ชื่อโครงการ" readonly value="<?php echo ($case == 1) ? '' : $row['project_id'] ?>" <?php echo ($case == '3') ? 'readonly' : 'required' ?>>
                                                 <!-- <div id="project_name_display"></div> -->
                                             </div>
                                             <div class="mb-2 col-lg-4 col-md-6 col-ms-12">
@@ -95,11 +95,11 @@ if ($case == '1') {
                                             </div>
                                             <div class="mb-2 col-lg-4 col-md-6 col-ms-12">
                                                 <label for="cus_id" class="form-label">ชื่อลูกค้า</label>
-                                                <input type="text" class="form-control" name="cus_id" id="project_name_display" placeholder="" disabled>
+                                                <input type="text" class="form-control" name="cus_id" id="project_name_display" readonly>
                                             </div>
                                             <div class="mb-2 col-lg-4 col-md-6 col-ms-12">
                                                 <label for="totalprice" class="form-label">มูลค่า</label>
-                                                <input type="text" class="form-control" name="totalprice" id="project_price_display" value="project_price_display" placeholder="" disabled>
+                                                <input type="text" class="form-control" name="totalprice" id="project_price_display"readonly>
                                             </div>
                                         </div>
                                         <div class="mt-2">
@@ -176,7 +176,7 @@ if ($case == '1') {
                                             showConfirmButton: false,
                                             timer: 2500
                                         }).then(function() {
-                                            window.location.href = "customer.php";
+                                            window.location.href = "receipt.php";
                                         });
                                     } else {
                                         Swal.fire(result.title, result.message, result

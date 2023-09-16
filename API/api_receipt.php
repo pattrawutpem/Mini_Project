@@ -10,18 +10,18 @@ switch ($case) {
     case 1: //insert customer
         $datesave = $_POST['datesave'];
         $receiptcode = $_POST['receiptcode'];
+        $datereceipt = $_POST['datereceipt'];
         $project_id = $_POST['project_id'];
         $totalprice = $_POST['totalprice'];
-        $status = $_POST['status'];
 
-        $maxID = mysqli_query($conn, "SELECT MAX(headcode) AS id FROM projcost_hd ORDER BY headcode");
+        $maxID = mysqli_query($conn, "SELECT MAX(headcode) AS id FROM project_hd ORDER BY headcode");
         if (mysqli_num_rows($maxID) > 0) {
             while ($row = mysqli_fetch_assoc($maxID)) {
                 $id = $row['id'] + 1;
             }
         }
 
-        $spl = mysqli_query($conn, "INSERT INTO projcost_hd VALUES ('$id','$datesave','$receiptcode','$totalprice','$status', 0)");
+        $spl = mysqli_query($conn, "INSERT INTO project_hd VALUES ('$id','$datesave','$receiptcode','$datereceipt','$project_id','$totalprice', 1 ,0)");
         if (!$spl) {
             echo json_encode(array('title' => 'Unsuccessfully!', 'status' => 'error', 'message' => 'Inserted data is not success.'));
         } else {
@@ -55,24 +55,6 @@ switch ($case) {
         }
         break;
     case 4:
-        // $project_id = mysqli_real_escape_string($conn, $_GET['id']); // เปลี่ยน $_GET['id'] เป็น $_GET['project_id']
-
-        // // คำสั่ง SQL เพื่อดึงชื่อโครงการ
-        // $sql = "SELECT * FROM project JOIN customer USING(cus_id) WHERE project_id = '$project_id' AND project.void = 0";
-        // $result = mysqli_query($conn, $sql);
-
-        // if ($result) {
-        //     $row = mysqli_fetch_assoc($result);
-        //     $project_name = $row['project_name']; // เปลี่ยน $project_id เป็น $project_name
-        //     $project_id = $row['project_id'];
-        //     $cus_firstname = $row['cus_firstname'];
-        //     $cus_lastname = $row['cus_lastname'];
-        //     $project_valueprice = $row['project_valueprice'];
-        //     echo $cus_firstname." ".$cus_lastname;
-        // } else {
-        //     echo "ไม่สามารถดึงข้อมูลโครงการได้: " . mysqli_error($conn);
-        // }
-
         $project_id = mysqli_real_escape_string($conn, $_GET['id']); // Correct the variable name to 'project_id'
 
         // SQL query to fetch project details
