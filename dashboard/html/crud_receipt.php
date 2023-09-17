@@ -152,7 +152,7 @@ if ($case == '1') {
                                                         <th></th>
                                                         <th></th>
                                                         <th class="text-center">รวมมูลค่าสินค้า</th>
-                                                        <!-- <th class="text-center"><?php echo $sum; ?></th> -->
+                                                        <th class="text-center"><?php echo ($case == 4) ? $sum :'' ?></th>
                                                     </tr>
                                                 </thead>
                                             </tbody>

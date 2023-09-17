@@ -48,7 +48,6 @@ include("header.php"); ?>
                                                     <th>รหัสโครงการ</th>
                                                     <th>ต้นทุน</th>
                                                     <th>ค่าใช้จ่าย</th>
-                                                    <th>รหัสพนักงาน</th>
                                                     <th>หมายเหตุ</th>
                                                     <th class="text-center" style="width: 200px;">Action</th>
                                                 </tr>
@@ -66,7 +65,6 @@ include("header.php"); ?>
                                                             <td><?php echo $row['project_id']; ?></td>
                                                             <td><?php echo $row['cost']; ?></td>
                                                             <td><?php echo $row['pay']; ?></td>
-                                                            <td><?php echo $row['emp_id']; ?></td>
                                                             <td><?php echo $row['comment']; ?></td>
                                                             <td class="text-center">
                                                                 <a href="crud_close.php?xCase=4&id=<?php echo $row['headcode'] ?>" name="btn_view" class="btn btn-info"><i class="fa-solid fa-address-card"></i></a>

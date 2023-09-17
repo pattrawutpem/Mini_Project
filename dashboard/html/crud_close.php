@@ -16,6 +16,11 @@ if ($case == '1') {
     $id = $_GET['id'];
     $result = mysqli_query($conn, "SELECT * FROM project_close WHERE headcode ='$id' ");
     $row = mysqli_fetch_array($result);
+} else if ($case  == '4') {
+    $header = 'บันทึกปิดโครงการ';
+    $id = $_GET['id'];
+    $result = mysqli_query($conn, "SELECT * FROM `project_close` JOIN employee USING(emp_id) JOIN project USING(project_id) WHERE project_close.void = 0");
+    $row = mysqli_fetch_array($result);
 }
 
 ?>
@@ -61,31 +66,31 @@ if ($case == '1') {
                                         <div class="row">
                                             <div class="mb-2 col-lg-4 col-md-6 col-ms-12">
                                                 <label for="headcode" class="form-label">เลขที่เอกสาร</label>
-                                                <input type="text" class="form-control" name="headcode" id="headcode" placeholder="" value="<?php echo ($case == 1) ? '' : $row['headcode'] ?>" <?php echo ($case == '3') ? 'readonly' : 'required' ?>>
+                                                <input type="text" class="form-control" name="headcode" id="headcode" placeholder="" value="<?php echo ($case == 1) ? '' : $row['headcode'] ?>" <?php echo ($case == '3' || ($case == 4)) ? 'readonly' : 'required' ?>>
                                             </div>
                                             <div class="mb-2 col-lg-4 col-md-6 col-ms-12">
                                                 <label for="dateclose" class="form-label">วันที่ปิดโครงการ</label>
-                                                <input type="date" class="form-control" name="dateclose" id="dateclose" placeholder="" value="<?php echo ($case == 1) ? '' : $row['dateclose'] ?>" <?php echo ($case == '3') ? 'readonly' : 'required' ?>>
+                                                <input type="date" class="form-control" name="dateclose" id="dateclose" placeholder="" value="<?php echo ($case == 1) ? '' : $row['dateclose'] ?>" <?php echo ($case == '3' || ($case == 4)) ? 'readonly' : 'required' ?>>
                                             </div>
                                             <div class="mb-2 col-lg-4 col-md-6 col-ms-12">
                                                 <label for="project_id" class="form-label">รหัสโครงการ</label>
-                                                <input type="text" class="form-control" name="project_id" id="project_id" placeholder="" value="<?php echo ($case == 1) ? '' : $row['project_id'] ?>" <?php echo ($case == '3') ? 'readonly' : 'required' ?>>
+                                                <input type="text" class="form-control" name="project_id" id="project_id" placeholder="" value="<?php echo ($case == 1) ? '' : $row['project_id'] ?>" <?php echo ($case == '3' || ($case == 4)) ? 'readonly' : 'required' ?>>
                                             </div>
                                             <div class="mb-2 col-lg-4 col-md-6 col-ms-12">
                                                 <label for="cost" class="form-label">ต้นทุน</label>
-                                                <input type="text" class="form-control" name="cost" id="cost" placeholder="" value="<?php echo ($case == 1) ? '' : $row['cost'] ?>" <?php echo ($case == '3') ? 'readonly' : 'required' ?>>
+                                                <input type="text" class="form-control" name="cost" id="cost" placeholder="" value="<?php echo ($case == 1) ? '' : $row['cost'] ?>" <?php echo ($case == '3' || ($case == 4)) ? 'readonly' : 'required' ?>>
                                             </div>
                                             <div class="mb-2 col-lg-4 col-md-6 col-ms-12">
                                                 <label for="pay" class="form-label">ค่าใช้จ่าย</label>
-                                                <input type="text" class="form-control" name="pay" id="pay" placeholder="" value="<?php echo ($case == 1) ? '' : $row['pay'] ?>" <?php echo ($case == '3') ? 'readonly' : 'required' ?>>
+                                                <input type="text" class="form-control" name="pay" id="pay" placeholder="" value="<?php echo ($case == 1) ? '' : $row['pay'] ?>" <?php echo ($case == '3' || ($case == 4)) ? 'readonly' : 'required' ?>>
                                             </div>
                                             <div class="mb-2 col-lg-4 col-md-6 col-ms-12">
                                                 <label for="emp_id" class="form-label">รหัสพนักงาน</label>
-                                                <input type="text" class="form-control" name="emp_id" id="emp_id" placeholder="" value="<?php echo ($case == 1) ? '' : $row['emp_id'] ?>" <?php echo ($case == '3') ? 'readonly' : 'required' ?>>
+                                                <input type="text" class="form-control" name="emp_id" id="emp_id" placeholder="" value="<?php echo ($case == 1) ? '' : $row['emp_id'] ?>" <?php echo ($case == '3'|| ($case == 4)) ? 'readonly' : 'required' ?>>
                                             </div>
                                             <div class="mb-2 col-lg-4 col-md-6 col-ms-12">
                                                 <label for="comment" class="form-label">หมายเหตุ</label>
-                                                <input type="text" class="form-control" name="comment" id="comment" placeholder="" value="<?php echo ($case == 1) ? '' : $row['comment'] ?>" <?php echo ($case == '3') ? 'readonly' : 'required' ?>>
+                                                <input type="text" class="form-control" name="comment" id="comment" placeholder="" value="<?php echo ($case == 1) ? '' : $row['comment'] ?>" <?php echo ($case == '3'|| ($case == 4)) ? 'readonly' : 'required' ?>>
                                             </div>
                                         </div>
                                         <div class="mt-2">
