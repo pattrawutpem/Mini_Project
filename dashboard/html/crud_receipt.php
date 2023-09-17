@@ -6,24 +6,20 @@ if ($case == '1') {
     $header = 'บันทึกค่าใช้จ่ายโครงการ';
     $id = '';
     $result_ = mysqli_query($conn, "SELECT * FROM project WHERE void = 0");
-} else if ($case  == '2') {
-    $header = 'Edit';
-    $id = $_GET['id'];
-    $result = mysqli_query($conn, "SELECT * FROM project_hd WHERE headcode ='$id' ");
-    $result_ = mysqli_query($conn, "SELECT * FROM project JOIN customer USING(cus_id) WHERE project_id AND project.void = 0");
-    $row = mysqli_fetch_array($result);
-    // print_r(md5($row['password']));
 } else if ($case  == '3') {
     $header = 'Delete';
     $id = $_GET['id'];
     $result = mysqli_query($conn, "SELECT * FROM project_hd WHERE headcode ='$id' ");
     $row = mysqli_fetch_array($result);
 } else if ($case  == '4') {
-    $header = 'Profile';
+    $header = 'View';
     $id = $_GET['id'];
     $result = mysqli_query($conn, "SELECT * FROM project_hd WHERE headcode ='$id' ");
     $result_ = mysqli_query($conn, "SELECT * FROM project JOIN customer USING(cus_id) WHERE project_id AND project.void = 0");
+    $result_hd = mysqli_query($conn, "SELECT * FROM `project_hd` JOIN project USING(project_id) JOIN customer USING(cus_id) WHERE project_hd.void = 0");
+    $result_value = mysqli_query($conn, "SELECT * FROM `project_hd` JOIN project_desc USING(headcode) WHERE project_hd.void =0");
     $row = mysqli_fetch_array($result);
+    $row_ = mysqli_fetch_array($result_hd);
 }
 
 ?>
@@ -69,24 +65,24 @@ if ($case == '1') {
                                         <div class="row">
                                             <div class="mb-2 col-lg-4 col-md-6 col-ms-12">
                                                 <label for="datesave" class="form-label">วันที่บันทึก</label>
-                                                <input type="date" class="form-control" name="datesave" id="datesave" value="<?php echo ($case == 1) ? '' : $row['datesave'] ?>" <?php echo ($case == '3') ? 'readonly' : 'required' ?>>
+                                                <input type="date" class="form-control" name="datesave" id="datesave" value="<?php echo ($case == 1) ? '' : $row['datesave'] ?>" <?php echo ($case == '3'|| $case == '4') ? 'readonly' : 'required' ?>>
                                             </div>
                                             <div class="mb-2 col-lg-4 col-md-6 col-ms-12">
                                                 <label for="receiptcode" class="form-label">เลขที่ใบเสร็จ</label>
-                                                <input type="text" class="form-control" name="receiptcode" id="receiptcode" placeholder="เลขที่ใบเสร็จ" value="<?php echo ($case == 1) ? '' : $row['receiptcode'] ?>" <?php echo ($case == '3') ? 'readonly' : 'required' ?>>
+                                                <input type="text" class="form-control" name="receiptcode" id="receiptcode" placeholder="เลขที่ใบเสร็จ" value="<?php echo ($case == 1) ? '' : $row['receiptcode'] ?>" <?php echo ($case == '3'|| $case == '4') ? 'readonly' : 'required' ?>>
                                             </div>
                                             <div class="mb-2 col-lg-4 col-md-6 col-ms-12">
                                                 <label for="datereceipt" class="form-label">วันที่ใบเสร็จ</label>
-                                                <input type="date" class="form-control" name="datereceipt" id="datereceipt" placeholder="วันที่ใบเสร็จ" value="<?php echo ($case == 1) ? '' : $row['datereceipt'] ?>" <?php echo ($case == '3') ? 'readonly' : 'required' ?>>
+                                                <input type="date" class="form-control" name="datereceipt" id="datereceipt" placeholder="วันที่ใบเสร็จ" value="<?php echo ($case == 1) ? '' : $row['datereceipt'] ?>" <?php echo ($case == '3'|| $case == '4') ? 'readonly' : 'required' ?>>
                                             </div>
                                             <div class="mb-2 col-lg-4 col-md-6 col-ms-12">
                                                 <label for="project_id" class="form-label">รหัสโครงการ</label>
-                                                <input type="text" class="form-control" id="project_id_display" placeholder="ชื่อโครงการ" readonly value="<?php echo ($case == 1) ? '' : $row['project_id'] ?>" <?php echo ($case == '3') ? 'readonly' : 'required' ?>>
+                                                <input type="text" class="form-control" id="project_id_display" placeholder="ชื่อโครงการ" readonly value="<?php echo ($case == 1) ? '' : $row['project_id'] ?>" <?php echo ($case == '3'|| $case == '4') ? 'readonly' : 'required' ?>>
                                                 <!-- <div id="project_name_display"></div> -->
                                             </div>
                                             <div class="mb-2 col-lg-4 col-md-6 col-ms-12">
                                                 <label for="datereceipt" class="form-label">ชื่อโครงการ</label>
-                                                <select class="form-select" aria-label="Default select example" name="project_id" id="project_id" value="<?php echo ($case == 1) ? '' : $row['project_id'] ?>" <?php echo ($case == '3') ? 'readonly' : 'required' ?>>
+                                                <select class="form-select" aria-label="Default select example" name="project_id" id="project_id" value="<?php echo ($case == 1) ? '' : $row['project_id'] ?>" <?php echo ($case == '3' || $case == '4') ? 'disabled' : 'required' ?>>
                                                     <option selected disabled>ชื่อโครงการ</option>
                                                     <?php
                                                     foreach ($result_ as $rowselect) {
@@ -102,14 +98,14 @@ if ($case == '1') {
                                             </div>
                                             <div class="mb-2 col-lg-4 col-md-6 col-ms-12">
                                                 <label for="cus_id" class="form-label">ชื่อลูกค้า</label>
-                                                <input type="text" class="form-control" name="cus_id" id="project_name_display" readonly>
+                                                <input type="text" class="form-control" name="cus_id" id="project_name_display" value="<?php echo ($case == '4') ?  $row_['cus_firstname'] ." ". $row_['cus_lastname']  : '' ?>" readonly>
                                             </div>
                                             <div class="mb-2 col-lg-4 col-md-6 col-ms-12">
                                                 <label for="totalprice" class="form-label">มูลค่า</label>
-                                                <input type="text" class="form-control" name="totalprice" id="project_price_display" readonly>
+                                                <input type="text" class="form-control" name="totalprice" id="project_price_display" value="<?php echo ($case == '4') ?  $row_['totalprice'] : '' ?>" readonly>
                                             </div>
                                         </div>
-                                       
+
                                         <table class="table my-2">
                                             <thead>
                                                 <tr>
@@ -117,19 +113,33 @@ if ($case == '1') {
                                                     <th>จำนวน</th>
                                                     <th>ราคา/หน่วย</th>
                                                     <th>จำนวนเงิน</th>
-                                                    <th><button type="button" class="btn btn-info" onclick="addInputFields()">เพิ่ม</button></th>
+                                                    <?php echo ($case == 1) ? '<th><button type="button" class="btn btn-info" onclick="addInputFields()">เพิ่ม</button></th>' : ''; ?>
                                                 </tr>
                                             </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td><input type="text" class="form-control" name="s_id[]" placeholder="รหัสสินค้า"></td>
-                                                    <td><input type="text" class="form-control" name="qty[]" placeholder="จำนวน"></td>
-                                                    <td><input type="text" class="form-control" name="s_price[]" placeholder="ราคา/หน่วย"></td>
-                                                    <td><input type="text" class="form-control" name="totalprice[]" placeholder="จำนวนเงิน"></td>
-                                                    
-                                                </tr>
-                                            </tbody>
-
+                                            <?php
+                                            if ($case == 1) {
+                                                     
+                                                echo '<tbody>
+                                                        <tr>
+                                                            <td><input type="text" class="form-control" name="s_id[]" placeholder="รหัสสินค้า"></td>
+                                                            <td><input type="text" class="form-control" name="qty[]" placeholder="จำนวน"></td>
+                                                            <td><input type="text" class="form-control" name="s_price[]" placeholder="ราคา/หน่วย"></td>
+                                                            <td><input type="text" class="form-control" name="totalprice[]" placeholder="จำนวนเงิน"></td>
+                                                        </tr>
+                                                    </tbody>';
+                                            } elseif($case == 4) {
+                                                foreach ($result_value as $rowselect) {
+                                                    echo '<tbody>
+                                                            <tr>
+                                                                <td><input type="text" class="form-control" readonly value="' . $rowselect["s_id"] . '"></td>
+                                                                <td><input type="text" class="form-control" readonly value="' . $rowselect["qty"] . '"></td>
+                                                                <td><input type="text" class="form-control" readonly value="' . $rowselect["s_price"] . '"></td>
+                                                                <td><input type="text" class="form-control" readonly value="' . $rowselect["totalprice"] . '"></td>
+                                                            </tr>
+                                                        </tbody>';
+                                                }
+                                            }
+                                            ?>
                                         </table>
                                         <div class="mt-2">
                                             <?php

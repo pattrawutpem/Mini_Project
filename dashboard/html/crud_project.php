@@ -5,7 +5,7 @@ $case = $_GET['xCase'];
 if ($case == '1') {
     $header = 'Add';
     $id = '';
-    $result = mysqli_query($conn, "SELECT *,if(project_status = 1,'อยู่ระหว่างดำเนินการ','ปิดโครงการ'))AS status FROM customer");
+    // $result = mysqli_query($conn, "SELECT *,if(project_status = 1,'อยู่ระหว่างดำเนินการ','ปิดโครงการ'))AS status FROM customer");
     $result_ = mysqli_query($conn, "SELECT * FROM customer");
     $result_emp = mysqli_query($conn, "SELECT * FROM employee");
 } else if ($case  == '2') {

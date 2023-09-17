@@ -62,7 +62,6 @@ include("header.php"); ?>
                                                             </th>
                                                             <td class="text-center">
                                                                 <a href="crud_receipt.php?xCase=4&id=<?php echo $row['headcode'] ?>" name="btn_view" class="btn btn-info"><i class="fa-solid fa-address-card"></i></a>
-                                                                <a href="crud_receipt.php?xCase=2&id=<?php echo $row['headcode'] ?>" name="btn_edit" class="btn btn-warning edit_sale"><i class="tf-icons bx bx-edit"></i></a>
                                                                 <a href="crud_receipt.php?xCase=3&id=<?php echo $row['headcode'] ?>" name="btn_delete" class="btn btn-danger"><i class="tf-icons bx bx-trash"></i></a>
                                                             </td>
                                                         </tr>

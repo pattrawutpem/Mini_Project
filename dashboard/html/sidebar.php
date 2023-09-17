@@ -36,6 +36,12 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                 <div data-i18n="Authentications">ข้อมูลค่าใช้จ่ายโครงการ</div>
             </a>
         </li>
+        <li class="menu-item <?php echo ($currentPage == '' || $currentPage == '') ? "active" : ""; ?>">
+            <a href="" class="menu-link">
+                <i class="menu-icon fa-light fa-file-invoice"></i>
+                <div data-i18n="Authentications">บันทึกปิดโครงการ</div>
+            </a>
+        </li>
         <li class="menu-item <?php echo ($currentPage == 'employee.php' || $currentPage == '') ? "active" : ""; ?>">
             <a href="employee.php" class="menu-link">
                 <i class="menu-icon fa-light fa-box-taped"></i>
