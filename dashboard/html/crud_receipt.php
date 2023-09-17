@@ -12,7 +12,7 @@ if ($case == '1') {
     $result = mysqli_query($conn, "SELECT * FROM project_hd WHERE headcode ='$id' ");
     $row = mysqli_fetch_array($result);
 } else if ($case  == '4') {
-    $header = 'View';
+    $header = 'บันทึกค่าใช้จ่ายโครงการ';
     $id = $_GET['id'];
     $result = mysqli_query($conn, "SELECT * FROM project_hd WHERE headcode ='$id' ");
     $result_ = mysqli_query($conn, "SELECT * FROM project JOIN customer USING(cus_id) WHERE project_id AND project.void = 0");
@@ -20,6 +20,7 @@ if ($case == '1') {
     $result_value = mysqli_query($conn, "SELECT * FROM `project_hd` JOIN project_desc USING(headcode) WHERE project_hd.void =0");
     $row = mysqli_fetch_array($result);
     $row_ = mysqli_fetch_array($result_hd);
+    $no = mysqli_fetch_array(mysqli_query($conn, "SELECT *,concat(SUBSTRING(datesave,9,2),SUBSTRING(datesave,6,2),headcode) as no FROM `project_hd`"));
 }
 
 ?>
@@ -60,24 +61,27 @@ if ($case == '1') {
                                 <div class="card-header text-center">
                                     <h3><?php echo $header; ?></h3>
                                 </div>
+                                <div class="">
+                                    <?php echo $no['no']; ?>
+                                </div>
                                 <div class="card-body">
                                     <form id="formAccountSettings" action="../../API/api_receipt.php?xCase=<?php echo $case ?>&id=<?php echo $id ?>" method="POST">
                                         <div class="row">
                                             <div class="mb-2 col-lg-4 col-md-6 col-ms-12">
                                                 <label for="datesave" class="form-label">วันที่บันทึก</label>
-                                                <input type="date" class="form-control" name="datesave" id="datesave" value="<?php echo ($case == 1) ? '' : $row['datesave'] ?>" <?php echo ($case == '3'|| $case == '4') ? 'readonly' : 'required' ?>>
+                                                <input type="date" class="form-control" name="datesave" id="datesave" value="<?php echo ($case == 1) ? '' : $row['datesave'] ?>" <?php echo ($case == '3' || $case == '4') ? 'readonly' : 'required' ?>>
                                             </div>
                                             <div class="mb-2 col-lg-4 col-md-6 col-ms-12">
                                                 <label for="receiptcode" class="form-label">เลขที่ใบเสร็จ</label>
-                                                <input type="text" class="form-control" name="receiptcode" id="receiptcode" placeholder="เลขที่ใบเสร็จ" value="<?php echo ($case == 1) ? '' : $row['receiptcode'] ?>" <?php echo ($case == '3'|| $case == '4') ? 'readonly' : 'required' ?>>
+                                                <input type="text" class="form-control" name="receiptcode" id="receiptcode" placeholder="เลขที่ใบเสร็จ" value="<?php echo ($case == 1) ? '' : $row['receiptcode'] ?>" <?php echo ($case == '3' || $case == '4') ? 'readonly' : 'required' ?>>
                                             </div>
                                             <div class="mb-2 col-lg-4 col-md-6 col-ms-12">
                                                 <label for="datereceipt" class="form-label">วันที่ใบเสร็จ</label>
-                                                <input type="date" class="form-control" name="datereceipt" id="datereceipt" placeholder="วันที่ใบเสร็จ" value="<?php echo ($case == 1) ? '' : $row['datereceipt'] ?>" <?php echo ($case == '3'|| $case == '4') ? 'readonly' : 'required' ?>>
+                                                <input type="date" class="form-control" name="datereceipt" id="datereceipt" placeholder="วันที่ใบเสร็จ" value="<?php echo ($case == 1) ? '' : $row['datereceipt'] ?>" <?php echo ($case == '3' || $case == '4') ? 'readonly' : 'required' ?>>
                                             </div>
                                             <div class="mb-2 col-lg-4 col-md-6 col-ms-12">
                                                 <label for="project_id" class="form-label">รหัสโครงการ</label>
-                                                <input type="text" class="form-control" id="project_id_display" placeholder="ชื่อโครงการ" readonly value="<?php echo ($case == 1) ? '' : $row['project_id'] ?>" <?php echo ($case == '3'|| $case == '4') ? 'readonly' : 'required' ?>>
+                                                <input type="text" class="form-control" id="project_id_display" placeholder="ชื่อโครงการ" readonly value="<?php echo ($case == 1) ? '' : $row['project_id'] ?>" <?php echo ($case == '3' || $case == '4') ? 'readonly' : 'required' ?>>
                                                 <!-- <div id="project_name_display"></div> -->
                                             </div>
                                             <div class="mb-2 col-lg-4 col-md-6 col-ms-12">
@@ -98,7 +102,7 @@ if ($case == '1') {
                                             </div>
                                             <div class="mb-2 col-lg-4 col-md-6 col-ms-12">
                                                 <label for="cus_id" class="form-label">ชื่อลูกค้า</label>
-                                                <input type="text" class="form-control" name="cus_id" id="project_name_display" value="<?php echo ($case == '4') ?  $row_['cus_firstname'] ." ". $row_['cus_lastname']  : '' ?>" readonly>
+                                                <input type="text" class="form-control" name="cus_id" id="project_name_display" value="<?php echo ($case == '4') ?  $row_['cus_firstname'] . " " . $row_['cus_lastname']  : '' ?>" readonly>
                                             </div>
                                             <div class="mb-2 col-lg-4 col-md-6 col-ms-12">
                                                 <label for="totalprice" class="form-label">มูลค่า</label>
@@ -116,30 +120,40 @@ if ($case == '1') {
                                                     <?php echo ($case == 1) ? '<th><button type="button" class="btn btn-info" onclick="addInputFields()">เพิ่ม</button></th>' : ''; ?>
                                                 </tr>
                                             </thead>
-                                            <?php
-                                            if ($case == 1) {
-                                                     
-                                                echo '<tbody>
-                                                        <tr>
+                                            <tbody>
+                                                <?php
+                                                if ($case == 1) {
+                                                    echo ' <tr>
                                                             <td><input type="text" class="form-control" name="s_id[]" placeholder="รหัสสินค้า"></td>
                                                             <td><input type="text" class="form-control" name="qty[]" placeholder="จำนวน"></td>
                                                             <td><input type="text" class="form-control" name="s_price[]" placeholder="ราคา/หน่วย"></td>
                                                             <td><input type="text" class="form-control" name="totalprice[]" placeholder="จำนวนเงิน"></td>
                                                         </tr>
-                                                    </tbody>';
-                                            } elseif($case == 4) {
-                                                foreach ($result_value as $rowselect) {
-                                                    echo '<tbody>
-                                                            <tr>
-                                                                <td><input type="text" class="form-control" readonly value="' . $rowselect["s_id"] . '"></td>
-                                                                <td><input type="text" class="form-control" readonly value="' . $rowselect["qty"] . '"></td>
-                                                                <td><input type="text" class="form-control" readonly value="' . $rowselect["s_price"] . '"></td>
-                                                                <td><input type="text" class="form-control" readonly value="' . $rowselect["totalprice"] . '"></td>
-                                                            </tr>
-                                                        </tbody>';
+                                                   ';
+                                                } elseif ($case == 4) {
+                                                    $sum = 0;
+                                                    foreach ($result_value as $rowselect) {
+                                                        $sum += $rowselect["totalprice"];
+                                                ?>
+                                                        <tr>
+                                                            <td><input type="text" class="form-control" readonly value="<?php echo $rowselect["s_id"] ?>"></td>
+                                                            <td><input type="text" class="form-control" readonly value="<?php echo $rowselect["qty"] ?>"></td>
+                                                            <td><input type="text" class="form-control" readonly value="<?php echo $rowselect["s_price"] ?>"></td>
+                                                            <td><input type="text" class="form-control" readonly value="<?php echo $rowselect["totalprice"] ?>"></td>
+                                                        </tr>
+                                                <?php
+                                                    }
                                                 }
-                                            }
-                                            ?>
+                                                ?>
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th class="text-center">รวมมูลค่าสินค้า</th>
+                                                        <th class="text-center"><?php echo $sum; ?></th>
+                                                    </tr>
+                                                </thead>
+                                            </tbody>
                                         </table>
                                         <div class="mt-2">
                                             <?php
@@ -163,61 +177,7 @@ if ($case == '1') {
 
                     <script>
                         // เลือกรหัสโครงการ
-                        var projectSelect = document.getElementById('project_id');
-                        // ช่องแสดงชื่อโครงการ
-                        var projectNameInput = document.getElementById('project_name_display');
-                        var projectNameInputID = document.getElementById('project_id_display');
-                        var projectNameInputprice = document.getElementById('project_price_display');
-
-                        // ใช้ addEventListener เพื่อดักเหตุการณ์การเลือกรหัสโครงการ
-                        projectSelect.addEventListener('change', function() {
-                            // หาค่าที่ถูกเลือก
-                            var selectedOption = projectSelect.options[projectSelect.selectedIndex];
-                            var selectedProjectID = selectedOption.value; // รหัสโครงการที่ถูกเลือก
-
-                            // ส่งคำขอ AJAX ไปยังเซิร์ฟเวอร์เพื่อดึงชื่อโครงการ
-                            $.ajax({
-                                url: '../../API/api_receipt.php?xCase=4&id=' + selectedProjectID,
-                                type: 'GET',
-                                success: function(data) {
-                                    var projectData = JSON.parse(data);
-                                    projectNameInputID.value = selectedOption.value;
-                                    projectNameInput.value = projectData.project_fullname;
-                                    projectNameInputprice.value = projectData.project_valueprice;
-                                }
-                            });
-
-                        });
-
-                        // multi insrt
-                        function addInputFields() {
-                            const table = document.querySelector('table');
-
-                            // Check if a tbody element exists, and create one if it doesn't
-                            let tbody = table.querySelector('tbody');
-                            if (!tbody) {
-                                tbody = document.createElement('tbody');
-                                table.appendChild(tbody);
-                            }
-
-                            const newRow = document.createElement('tr');
-
-                            const fieldNames = ['s_id', 'qty', 's_price', 'totalprice'];
-                            const field_holder = ['รหัสสินค้า', 'จำนวน', 'ราคา/หน่วย', 'จำนวนเงิน'];
-
-                            for (let i = 0; i < fieldNames.length; i++) {
-                                const newCell = document.createElement('td');
-                                const newInput = document.createElement('input');
-                                newInput.type = 'text';
-                                newInput.name = `${fieldNames[i]}[]`;
-                                newInput.className = 'form-control';
-                                newInput.placeholder = `${field_holder[i]}`;
-                                newCell.appendChild(newInput);
-                                newRow.appendChild(newCell);
-                            }
-
-                            tbody.appendChild(newRow);
-                        }
+                        var projectSelect = document.getElementById(' project_id'); // ช่องแสดงชื่อโครงการ var projectNameInput=document.getElementById('project_name_display'); var projectNameInputID=document.getElementById('project_id_display'); var projectNameInputprice=document.getElementById('project_price_display'); // ใช้ addEventListener เพื่อดักเหตุการณ์การเลือกรหัสโครงการ projectSelect.addEventListener('change', function() { // หาค่าที่ถูกเลือก var selectedOption=projectSelect.options[projectSelect.selectedIndex]; var selectedProjectID=selectedOption.value; // รหัสโครงการที่ถูกเลือก // ส่งคำขอ AJAX ไปยังเซิร์ฟเวอร์เพื่อดึงชื่อโครงการ $.ajax({ url: '../../API/api_receipt.php?xCase=4&id=' + selectedProjectID, type: 'GET' , success: function(data) { var projectData=JSON.parse(data); projectNameInputID.value=selectedOption.value; projectNameInput.value=projectData.project_fullname; projectNameInputprice.value=projectData.project_valueprice; } }); }); // multi insrt function addInputFields() { const table=document.querySelector('table'); // Check if a tbody element exists, and create one if it doesn't let tbody=table.querySelector('tbody'); if (!tbody) { tbody=document.createElement('tbody'); table.appendChild(tbody); } const newRow=document.createElement('tr'); const fieldNames=['s_id', 'qty' , 's_price' , 'totalprice' ]; const field_holder=['รหัสสินค้า', 'จำนวน' , 'ราคา/หน่วย' , 'จำนวนเงิน' ]; for (let i=0; i < fieldNames.length; i++) { const newCell=document.createElement('td'); const newInput=document.createElement('input'); newInput.type='text' ; newInput.name=`${fieldNames[i]}[]`; newInput.className='form-control' ; newInput.placeholder=`${field_holder[i]}`; newCell.appendChild(newInput); newRow.appendChild(newCell); } tbody.appendChild(newRow); } 
                     </script>
 
                     <script>
