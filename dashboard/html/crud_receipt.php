@@ -126,9 +126,9 @@ if ($case == '1') {
                                                 if ($case == 1) {
                                                     echo ' <tr>
                                                             <td><input type="text" class="form-control" name="s_id[]" placeholder="รหัสสินค้า"></td>
-                                                            <td><input type="text" class="form-control" name="qty[]" id="number1" placeholder="จำนวน"></td>
-                                                            <td><input type="text" class="form-control" name="s_price[]" id="number2" placeholder="ราคา/หน่วย"></td>
-                                                            <td><input type="text" class="form-control" name="totalprice[]" id="multiplyResult" placeholder="จำนวนเงิน"></td>
+                                                            <td><input type="text" class="form-control" name="qty[]" id="qty" placeholder="จำนวน"></td>
+                                                            <td><input type="text" class="form-control" name="s_price[]" id="s_price" placeholder="ราคา/หน่วย"></td>
+                                                            <td><input type="text" class="form-control" name="totalprice[]" id=""  placeholder="จำนวนเงิน"></td>
                                                         </tr>
                                                    ';
                                                 } elseif ($case == 4) {
@@ -152,7 +152,7 @@ if ($case == '1') {
                                                         <th></th>
                                                         <th></th>
                                                         <th class="text-center">รวมมูลค่าสินค้า</th>
-                                                        <th class="text-center"><?php echo ($case == 4) ? $sum :'' ?></th>
+                                                        <th class="text-center"><?php echo ($case == 4) ? $sum : '' ?></th>
                                                     </tr>
                                                 </thead>
                                             </tbody>
@@ -178,19 +178,29 @@ if ($case == '1') {
                     <!-- / Content -->
 
                     <script>
-                        // Function to update the result in real-time
-                        function updateResult() {
-                            const num1 = parseFloat(document.getElementById('number1').value) || 0;
-                            const num2 = parseFloat(document.getElementById('number2').value) || 0;
-                            const result = num1 * num2;
+                        // ดึงคอลเล็กชันของอินพุต "จำนวน" และ "ราคา/หน่วย"
+                        var qtyInputs = document.getElementsByName("qty");
+                        var sPriceInputs = document.getElementsByName("s_price");
 
-                            document.getElementById('multiplyResult').textContent = result;
+                        // สร้างตัวแปรเพื่อเก็บผลลัพธ์
+                        var results = [];
+
+                        // วนลูปผ่านอินพุตและคำนวณผลคูณ
+                        for (var i = 0; i < qtyInputs.length; i++) {
+                            var qty = parseFloat(qtyInputs[i].value); // แปลงค่า "จำนวน" เป็นตัวเลข
+                            var sPrice = parseFloat(sPriceInputs[i].value); // แปลงค่า "ราคา/หน่วย" เป็นตัวเลข
+
+                            // คำนวณผลคูณ
+                            var result = qty * sPrice;
+
+                            // เพิ่มผลลัพธ์ลงในอาร์เรย์
+                            results.push(result);
                         }
 
-                        // Attach event listeners to input fields for real-time updates
-                        document.getElementById('number1').addEventListener('input', updateResult);
-                        document.getElementById('number2').addEventListener('input', updateResult);
+                        // แสดงผลลัพธ์หรือทำอะไรกับมันตามที่คุณต้องการ
+                        console.log(results); // แสดงผลลัพธ์ในคอนโซล
                     </script>
+
 
                     <script>
                         // เลือกรหัสโครงการ
