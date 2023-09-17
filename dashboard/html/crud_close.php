@@ -8,13 +8,13 @@ if ($case == '1') {
 } else if ($case  == '2') {
     $header = 'Edit';
     $id = $_GET['id'];
-    $result = mysqli_query($conn, "SELECT * FROM stock WHERE s_id ='$id' ");
+    $result = mysqli_query($conn, "SELECT * FROM project_close WHERE headcode ='$id' ");
     $row = mysqli_fetch_array($result);
     // print_r(md5($row['password']));
 } else if ($case  == '3') {
     $header = 'Delete';
     $id = $_GET['id'];
-    $result = mysqli_query($conn, "SELECT * FROM stock WHERE s_id ='$id' ");
+    $result = mysqli_query($conn, "SELECT * FROM project_close WHERE headcode ='$id' ");
     $row = mysqli_fetch_array($result);
 }
 
@@ -41,13 +41,12 @@ if ($case == '1') {
                     <!-- Content Header (Page header) -->
                     <div class="content-header">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item active"><a href="product.php" class="text-decolation">
+                            <li class="breadcrumb-item active"><a href="close_project.php" class="text-decolation">
 บันทึกปิดโครงการ</a>
                             </li>
                             <!-- <li class="breadcrumb-item active"><a href="magUsers.php" class="text-decolation">Manage
                                     User</a></li> -->
-                            <li class="breadcrumb-item"><?php echo $header; ?> 
-บันทึกปิดโครงการ</li>
+                            <li class="breadcrumb-item"><?php echo $header; ?></li>
                         </ol>
                     </div>
                     <!-- /.content-header -->
@@ -61,16 +60,32 @@ if ($case == '1') {
                                     <form id="formAccountSettings" action="../../API/api_close.php?xCase=<?php echo $case ?>&id=<?php echo $id ?>" method="POST">
                                         <div class="row">
                                             <div class="mb-2 col-lg-4 col-md-6 col-ms-12">
-                                                <label for="s_name" class="form-label">สินค้า</label>
-                                                <input type="text" class="form-control" name="s_name" id="s_name" placeholder="Enter product name" value="<?php echo ($case == 1) ? '' : $row['s_name'] ?>" <?php echo ($case == '3') ? 'readonly' : 'required' ?>>
+                                                <label for="headcode" class="form-label">เลขที่เอกสาร</label>
+                                                <input type="text" class="form-control" name="headcode" id="headcode" placeholder="" value="<?php echo ($case == 1) ? '' : $row['headcode'] ?>" <?php echo ($case == '3') ? 'readonly' : 'required' ?>>
                                             </div>
                                             <div class="mb-2 col-lg-4 col-md-6 col-ms-12">
-                                                <label for="s_unit" class="form-label">หน่วยนับ</label>
-                                                <input type="text" class="form-control" name="s_unit" id="s_unit" placeholder="Enter Product description" value="<?php echo ($case == 1) ? '' : $row['s_unit'] ?>" <?php echo ($case == '3') ? 'readonly' : 'required' ?>>
+                                                <label for="dateclose" class="form-label">วันที่ปิดโครงการ</label>
+                                                <input type="date" class="form-control" name="dateclose" id="dateclose" placeholder="" value="<?php echo ($case == 1) ? '' : $row['dateclose'] ?>" <?php echo ($case == '3') ? 'readonly' : 'required' ?>>
                                             </div>
                                             <div class="mb-2 col-lg-4 col-md-6 col-ms-12">
-                                                <label for="s_price" class="form-label">ราคา/หน่วย</label>
-                                                <input type="text" class="form-control" name="s_price" id="s_price" placeholder="0.00" value="<?php echo ($case == 1) ? '' : $row['s_price'] ?>" <?php echo ($case == '3') ? 'readonly' : 'required' ?>>
+                                                <label for="project_id" class="form-label">รหัสโครงการ</label>
+                                                <input type="text" class="form-control" name="project_id" id="project_id" placeholder="" value="<?php echo ($case == 1) ? '' : $row['project_id'] ?>" <?php echo ($case == '3') ? 'readonly' : 'required' ?>>
+                                            </div>
+                                            <div class="mb-2 col-lg-4 col-md-6 col-ms-12">
+                                                <label for="cost" class="form-label">ต้นทุน</label>
+                                                <input type="text" class="form-control" name="cost" id="cost" placeholder="" value="<?php echo ($case == 1) ? '' : $row['cost'] ?>" <?php echo ($case == '3') ? 'readonly' : 'required' ?>>
+                                            </div>
+                                            <div class="mb-2 col-lg-4 col-md-6 col-ms-12">
+                                                <label for="pay" class="form-label">ค่าใช้จ่าย</label>
+                                                <input type="text" class="form-control" name="pay" id="pay" placeholder="" value="<?php echo ($case == 1) ? '' : $row['pay'] ?>" <?php echo ($case == '3') ? 'readonly' : 'required' ?>>
+                                            </div>
+                                            <div class="mb-2 col-lg-4 col-md-6 col-ms-12">
+                                                <label for="emp_id" class="form-label">รหัสพนักงาน</label>
+                                                <input type="text" class="form-control" name="emp_id" id="emp_id" placeholder="" value="<?php echo ($case == 1) ? '' : $row['emp_id'] ?>" <?php echo ($case == '3') ? 'readonly' : 'required' ?>>
+                                            </div>
+                                            <div class="mb-2 col-lg-4 col-md-6 col-ms-12">
+                                                <label for="comment" class="form-label">หมายเหตุ</label>
+                                                <input type="text" class="form-control" name="comment" id="comment" placeholder="" value="<?php echo ($case == 1) ? '' : $row['comment'] ?>" <?php echo ($case == '3') ? 'readonly' : 'required' ?>>
                                             </div>
                                         </div>
                                         <div class="mt-2">
@@ -81,7 +96,7 @@ if ($case == '1') {
                                                         '<button type="submit" name="submit_pro" class="btn btn-danger">Delete</button>' : ''))
                                             ?>
                                             <!-- <button type="submit" name="submit" class="btn btn-success">บันทึก</button> -->
-                                            <a href="product.php" class="btn btn-secondary ms-3">Cancel</a>
+                                            <a href="close_project.php" class="btn btn-secondary ms-3">Cancel</a>
                                         </div>
                                     </form>
 
@@ -119,7 +134,7 @@ if ($case == '1') {
                                             showConfirmButton: false,
                                             timer: 2500
                                         }).then(function() {
-                                            window.location.href = "product.php";
+                                            window.location.href = "close_project.php";
                                         });
                                     } else {
                                         Swal.fire(result.title, result.message, result

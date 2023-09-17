@@ -8,24 +8,21 @@ $case = $_GET['xCase'];
 $id = $_GET['id'];
 switch ($case) {
     case 1: //insert customer
-        $cus_firstname = $_POST['cus_firstname'];
-        $cus_lastname = $_POST['cus_lastname'];
-        $cus_address = $_POST['cus_address'];
-        $cus_subdis = $_POST['cus_subdis'];
-        $cus_district = $_POST['cus_district'];
-        $cus_province = $_POST['cus_province'];
-        $cus_postcode = $_POST['cus_postcode'];
-        $cus_phone = $_POST['cus_phone'];
-        $cus_email = $_POST['cus_email'];
+        $dateclose = $_POST['dateclose'];
+        $project_id = $_POST['project_id'];
+        $cost = $_POST['cost'];
+        $pay = $_POST['pay'];
+        $emp_id = $_POST['emp_id'];
+        $comment = $_POST['comment'];
 
-        $maxID = mysqli_query($conn, "SELECT MAX(cus_id) AS id FROM customer ORDER BY cus_id");
+        $maxID = mysqli_query($conn, "SELECT MAX(headcode) AS id FROM project_close ORDER BY headcode");
         if (mysqli_num_rows($maxID) > 0) {
             while ($row = mysqli_fetch_assoc($maxID)) {
                 $id = $row['id'] + 1;
             }
         }
 
-        $spl = mysqli_query($conn, "INSERT INTO customer VALUES ('$id','$cus_firstname','$cus_lastname','$cus_address','$cus_subdis','$cus_district', '$cus_province','$cus_postcode','$cus_phone','$cus_email',0)");
+        $spl = mysqli_query($conn, "INSERT INTO project_close VALUES ('$id','$dateclose','$project_id','$cost','$pay','$emp_id', '$comment',0)");
         if (!$spl) {
             echo json_encode(array('title' => 'Unsuccessfully!', 'status' => 'error', 'message' => 'Inserted data is not success.'));
         } else {
@@ -33,19 +30,15 @@ switch ($case) {
         }
         break;
     case 2: //Update
-        $cus_firstname = $_POST['cus_firstname'];
-        $cus_lastname = $_POST['cus_lastname'];
-        $cus_address = $_POST['cus_address'];
-        $cus_subdis = $_POST['cus_subdis'];
-        $cus_district = $_POST['cus_district'];
-        $cus_province = $_POST['cus_province'];
-        $cus_postcode = $_POST['cus_postcode'];
-        $cus_phone = $_POST['cus_phone'];
-        $cus_email = $_POST['cus_email'];
+        $dateclose = $_POST['dateclose'];
+        $project_id = $_POST['project_id'];
+        $cost = $_POST['cost'];
+        $pay = $_POST['pay'];
+        $emp_id = $_POST['emp_id'];
+        $comment = $_POST['comment'];
 
-        $spl = mysqli_query($conn, "UPDATE customer SET cus_firstname = '$cus_firstname', cus_lastname = '$cus_lastname',cus_address = '$cus_address'
-        ,cus_subdis = '$cus_subdis',cus_district = '$cus_district', cus_province = '$cus_province', cus_postcode = '$cus_postcode', 
-        cus_phone = '$cus_phone', cus_email = '$cus_email' Where cus_id = $id");
+        $spl = mysqli_query($conn, "UPDATE project_close SET project_id = '$project_id', cost = '$cost',pay = '$pay'
+        ,emp_id = '$emp_id',comment = '$comment' Where headcode = $id");
         if (!$spl) {
             echo json_encode(array('title' => 'Unsuccessfully!', 'status' => 'error', 'message' => 'Inserted data is not success.'));
         } else {
@@ -54,7 +47,7 @@ switch ($case) {
         break;
     case 3:
         $id = $_GET['id'];
-        $spl = mysqli_query($conn, "UPDATE customer SET void = '1' Where cus_id = $id");
+        $spl = mysqli_query($conn, "UPDATE project_close SET void = '1' Where headcode = $id");
         if (!$spl) {
             echo json_encode(array('title' => 'Unsuccessfully!', 'status' => 'error', 'message' => 'Inserted data is not success.'));
         } else {
