@@ -124,12 +124,7 @@ if ($case == '1') {
                                             <tbody>
                                                 <?php
                                                 if ($case == 1) {
-                                                    echo ' <tr>
-                                                            <td><input type="text" class="form-control" name="s_id[]" placeholder="รหัสสินค้า"></td>
-                                                            <td><input type="text" class="form-control" name="qty[]" id="qty" placeholder="จำนวน"></td>
-                                                            <td><input type="text" class="form-control" name="s_price[]" id="s_price" placeholder="ราคา/หน่วย"></td>
-                                                            <td><input type="text" class="form-control" name="totalprice[]" id=""  placeholder="จำนวนเงิน"></td>
-                                                        </tr>
+                                                    echo '
                                                    ';
                                                 } elseif ($case == 4) {
                                                     $sum = 0;
@@ -152,7 +147,7 @@ if ($case == '1') {
                                                         <th></th>
                                                         <th></th>
                                                         <th class="text-center">รวมมูลค่าสินค้า</th>
-                                                        <th class="text-center"><?php echo ($case == 4) ? $sum : '' ?></th>
+                                                        <th class="text-center" id="grandTotal"><?php echo ($case == 4) ? $sum : '' ?></th>
                                                     </tr>
                                                 </thead>
                                             </tbody>
@@ -176,31 +171,6 @@ if ($case == '1') {
                         </div>
                     </div>
                     <!-- / Content -->
-
-                    <script>
-                        // ดึงคอลเล็กชันของอินพุต "จำนวน" และ "ราคา/หน่วย"
-                        var qtyInputs = document.getElementsByName("qty");
-                        var sPriceInputs = document.getElementsByName("s_price");
-
-                        // สร้างตัวแปรเพื่อเก็บผลลัพธ์
-                        var results = [];
-
-                        // วนลูปผ่านอินพุตและคำนวณผลคูณ
-                        for (var i = 0; i < qtyInputs.length; i++) {
-                            var qty = parseFloat(qtyInputs[i].value); // แปลงค่า "จำนวน" เป็นตัวเลข
-                            var sPrice = parseFloat(sPriceInputs[i].value); // แปลงค่า "ราคา/หน่วย" เป็นตัวเลข
-
-                            // คำนวณผลคูณ
-                            var result = qty * sPrice;
-
-                            // เพิ่มผลลัพธ์ลงในอาร์เรย์
-                            results.push(result);
-                        }
-
-                        // แสดงผลลัพธ์หรือทำอะไรกับมันตามที่คุณต้องการ
-                        console.log(results); // แสดงผลลัพธ์ในคอนโซล
-                    </script>
-
 
                     <script>
                         // เลือกรหัสโครงการ
@@ -230,11 +200,36 @@ if ($case == '1') {
 
                         });
 
-                        // multi insrt
+                        function updateRowResult(row) {
+                            const num1 = parseFloat(row.querySelector('.qty').value) || 0;
+                            const num2 = parseFloat(row.querySelector('.s_price').value) || 0;
+                            const result = num1 * num2;
+
+                            row.querySelector('.totalprice').value = result;
+
+                            // รวมค่า
+                            calculateGrandTotal();
+                        }
+
+                        // รวมค่าทุกrow
+                        function calculateGrandTotal() {
+                            const totalpriceInputs = document.querySelectorAll('.totalprice');
+                            let grandTotal = 0;
+
+                            totalpriceInputs.forEach(input => {
+                                const value = parseFloat(input.value) || 0;
+                                grandTotal += value;
+                            });
+
+                            // ผลลัพ
+                            document.getElementById('grandTotal').textContent = grandTotal;
+                        }
+
+                        // เพิ่มrow tableใหม่
                         function addInputFields() {
                             const table = document.querySelector('table');
 
-                            // Check if a tbody element exists, and create one if it doesn't
+                            // เช็คให้สร้างtbodyแค่ตัวเดียว
                             let tbody = table.querySelector('tbody');
                             if (!tbody) {
                                 tbody = document.createElement('tbody');
@@ -251,10 +246,17 @@ if ($case == '1') {
                                 const newInput = document.createElement('input');
                                 newInput.type = 'text';
                                 newInput.name = `${fieldNames[i]}[]`;
-                                newInput.className = 'form-control';
+                                newInput.className = `form-control ${fieldNames[i]}`;
                                 newInput.placeholder = `${field_holder[i]}`;
                                 newCell.appendChild(newInput);
                                 newRow.appendChild(newCell);
+
+                                // คูณค่า ในrow tableใหม่
+                                if (fieldNames[i] === 'qty' || fieldNames[i] === 's_price') {
+                                    newInput.addEventListener('input', function() {
+                                        updateRowResult(newRow);
+                                    });
+                                }
                             }
 
                             tbody.appendChild(newRow);

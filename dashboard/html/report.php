@@ -15,7 +15,7 @@ class PDF extends FPDF
         $this->SetFont('angsa', '', 15);
         $this->Cell(12);
 
-        $this->Cell(100, 10, 'Products', 0, 1);
+        $this->Cell(100, 10, 'บันทึกค่าใช้จ่ายโครงการ', 0, 1);
 
         //dummy cell to give line spacing
         //$this->Cell(0,5,'',0,1);
@@ -53,12 +53,15 @@ $pdf->SetFont('angsa', '', 9);
 $pdf->SetDrawColor(0, 0, 0);
 
 
-$query = mysqli_query($conn, "select * from products");
+$query = mysqli_query($conn, "select * from project_hd");
 while ($data = mysqli_fetch_array($query)) {
-    $pdf->Cell(20, 5, $data['product_id'], 1, 0, 'C');
     $pdf->Cell(40, 5, $data['product_name'], 1, 0);
-    $pdf->Cell(85, 5, $data['product_desc'], 1, 0);
-    $pdf->Cell(25, 5, $data['product_price'], 1, 1, 'C');
+    $pdf->Cell(85, 5, $data['datesave'], 1, 0);
+    $pdf->Cell(85, 5, $data['receiptcode'], 1, 0);
+    $pdf->Cell(85, 5, $data['datereceipt'], 1, 0);
+    $pdf->Cell(85, 5, $data['project_id'], 1, 0);
+    $pdf->Cell(85, 5, $data['totalprice'], 1, 0);
+    $pdf->Cell(25, 5, $data['receiptcode'], 1, 1, 'C');
 }
 $pdf->Cell(40, 10, iconv('UTF-8', 'cp874', $data));
 $pdf->Output('Myreport.pdf', 'F');
