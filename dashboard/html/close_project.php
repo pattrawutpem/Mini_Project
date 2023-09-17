@@ -36,7 +36,7 @@ include("header.php"); ?>
                         <div class="col-12 order-2 order-md-3 order-lg-2 mb-4">
                             <div class="card">
                                 <div class="card-header">
-                                    <a href="crud_employee.php?xCase=1" class="btn btn-primary"><i class="fa-solid fa-plus me-2"></i>ADD</a>
+                                    <a href="crud_close.php?xCase=1" class="btn btn-primary"><i class="fa-solid fa-plus me-2"></i>Add</a>
                                 </div>
                                 <div class="">
                                     <div class="card-body">
@@ -69,9 +69,9 @@ include("header.php"); ?>
                                                             <td><?php echo $row['emp_id']; ?></td>
                                                             <td><?php echo $row['comment']; ?></td>
                                                             <td class="text-center">
-                                                                <a href="crud_employee.php?xCase=4&id=<?php echo $row['emp_id'] ?>" name="btn_view" class="btn btn-info"><i class="fa-solid fa-address-card"></i></a>
-                                                                <a href="crud_employee.php?xCase=2&id=<?php echo $row['emp_id'] ?>" name="btn_edit" class="btn btn-warning edit_sale"><i class="tf-icons bx bx-edit"></i></a>
-                                                                <a href="crud_employee.php?xCase=3&id=<?php echo $row['emp_id'] ?>" name="btn_delete" class="btn btn-danger"><i class="tf-icons bx bx-trash"></i></a>
+                                                                <a href="crud_close.php?xCase=4&id=<?php echo $row['headcode'] ?>" name="btn_view" class="btn btn-info"><i class="fa-solid fa-address-card"></i></a>
+                                                                <a href="crud_close.php?xCase=2&id=<?php echo $row['headcode'] ?>" name="btn_edit" class="btn btn-warning edit_sale"><i class="tf-icons bx bx-edit"></i></a>
+                                                                <a href="crud_close.php?xCase=3&id=<?php echo $row['headcode'] ?>" name="btn_delete" class="btn btn-danger"><i class="tf-icons bx bx-trash"></i></a>
                                                             </td>
                                                         </tr>
                                                 <?php

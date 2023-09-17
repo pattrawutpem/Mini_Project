@@ -20,7 +20,8 @@ if ($case == '1') {
     $result_value = mysqli_query($conn, "SELECT * FROM `project_hd` JOIN project_desc USING(headcode) WHERE project_hd.void =0");
     $row = mysqli_fetch_array($result);
     $row_ = mysqli_fetch_array($result_hd);
-    $no = mysqli_fetch_array(mysqli_query($conn, "SELECT *,concat(SUBSTRING(datesave,9,2),SUBSTRING(datesave,6,2),headcode) as no FROM `project_hd`"));
+    $nn = mysqli_query($conn, "SELECT *,concat(SUBSTRING(datesave,9,2),SUBSTRING(datesave,6,2),headcode) as no_ FROM `project_hd`");
+    $no = mysqli_fetch_array($nn);
 }
 
 ?>
@@ -62,7 +63,7 @@ if ($case == '1') {
                                     <h3><?php echo $header; ?></h3>
                                 </div>
                                 <div class="">
-                                    <?php echo $no['no']; ?>
+                                    <?php echo ($case == 4) ? $no['no_'] : '' ?>
                                 </div>
                                 <div class="card-body">
                                     <form id="formAccountSettings" action="../../API/api_receipt.php?xCase=<?php echo $case ?>&id=<?php echo $id ?>" method="POST">
@@ -125,13 +126,14 @@ if ($case == '1') {
                                                 if ($case == 1) {
                                                     echo ' <tr>
                                                             <td><input type="text" class="form-control" name="s_id[]" placeholder="รหัสสินค้า"></td>
-                                                            <td><input type="text" class="form-control" name="qty[]" placeholder="จำนวน"></td>
-                                                            <td><input type="text" class="form-control" name="s_price[]" placeholder="ราคา/หน่วย"></td>
-                                                            <td><input type="text" class="form-control" name="totalprice[]" placeholder="จำนวนเงิน"></td>
+                                                            <td><input type="text" class="form-control" name="qty[]" id="number1" placeholder="จำนวน"></td>
+                                                            <td><input type="text" class="form-control" name="s_price[]" id="number2" placeholder="ราคา/หน่วย"></td>
+                                                            <td><input type="text" class="form-control" name="totalprice[]" id="multiplyResult" placeholder="จำนวนเงิน"></td>
                                                         </tr>
                                                    ';
                                                 } elseif ($case == 4) {
                                                     $sum = 0;
+
                                                     foreach ($result_value as $rowselect) {
                                                         $sum += $rowselect["totalprice"];
                                                 ?>
@@ -150,7 +152,7 @@ if ($case == '1') {
                                                         <th></th>
                                                         <th></th>
                                                         <th class="text-center">รวมมูลค่าสินค้า</th>
-                                                        <th class="text-center"><?php echo $sum; ?></th>
+                                                        <!-- <th class="text-center"><?php echo $sum; ?></th> -->
                                                     </tr>
                                                 </thead>
                                             </tbody>
@@ -176,8 +178,77 @@ if ($case == '1') {
                     <!-- / Content -->
 
                     <script>
+                        // Function to update the result in real-time
+                        function updateResult() {
+                            const num1 = parseFloat(document.getElementById('number1').value) || 0;
+                            const num2 = parseFloat(document.getElementById('number2').value) || 0;
+                            const result = num1 * num2;
+
+                            document.getElementById('multiplyResult').textContent = result;
+                        }
+
+                        // Attach event listeners to input fields for real-time updates
+                        document.getElementById('number1').addEventListener('input', updateResult);
+                        document.getElementById('number2').addEventListener('input', updateResult);
+                    </script>
+
+                    <script>
                         // เลือกรหัสโครงการ
-                        var projectSelect = document.getElementById(' project_id'); // ช่องแสดงชื่อโครงการ var projectNameInput=document.getElementById('project_name_display'); var projectNameInputID=document.getElementById('project_id_display'); var projectNameInputprice=document.getElementById('project_price_display'); // ใช้ addEventListener เพื่อดักเหตุการณ์การเลือกรหัสโครงการ projectSelect.addEventListener('change', function() { // หาค่าที่ถูกเลือก var selectedOption=projectSelect.options[projectSelect.selectedIndex]; var selectedProjectID=selectedOption.value; // รหัสโครงการที่ถูกเลือก // ส่งคำขอ AJAX ไปยังเซิร์ฟเวอร์เพื่อดึงชื่อโครงการ $.ajax({ url: '../../API/api_receipt.php?xCase=4&id=' + selectedProjectID, type: 'GET' , success: function(data) { var projectData=JSON.parse(data); projectNameInputID.value=selectedOption.value; projectNameInput.value=projectData.project_fullname; projectNameInputprice.value=projectData.project_valueprice; } }); }); // multi insrt function addInputFields() { const table=document.querySelector('table'); // Check if a tbody element exists, and create one if it doesn't let tbody=table.querySelector('tbody'); if (!tbody) { tbody=document.createElement('tbody'); table.appendChild(tbody); } const newRow=document.createElement('tr'); const fieldNames=['s_id', 'qty' , 's_price' , 'totalprice' ]; const field_holder=['รหัสสินค้า', 'จำนวน' , 'ราคา/หน่วย' , 'จำนวนเงิน' ]; for (let i=0; i < fieldNames.length; i++) { const newCell=document.createElement('td'); const newInput=document.createElement('input'); newInput.type='text' ; newInput.name=`${fieldNames[i]}[]`; newInput.className='form-control' ; newInput.placeholder=`${field_holder[i]}`; newCell.appendChild(newInput); newRow.appendChild(newCell); } tbody.appendChild(newRow); } 
+                        var projectSelect = document.getElementById('project_id');
+                        // ช่องแสดงชื่อโครงการ
+                        var projectNameInput = document.getElementById('project_name_display');
+                        var projectNameInputID = document.getElementById('project_id_display');
+                        var projectNameInputprice = document.getElementById('project_price_display');
+
+                        // ใช้ addEventListener เพื่อดักเหตุการณ์การเลือกรหัสโครงการ
+                        projectSelect.addEventListener('change', function() {
+                            // หาค่าที่ถูกเลือก
+                            var selectedOption = projectSelect.options[projectSelect.selectedIndex];
+                            var selectedProjectID = selectedOption.value; // รหัสโครงการที่ถูกเลือก
+
+                            // ส่งคำขอ AJAX ไปยังเซิร์ฟเวอร์เพื่อดึงชื่อโครงการ
+                            $.ajax({
+                                url: '../../API/api_receipt.php?xCase=4&id=' + selectedProjectID,
+                                type: 'GET',
+                                success: function(data) {
+                                    var projectData = JSON.parse(data);
+                                    projectNameInputID.value = selectedOption.value;
+                                    projectNameInput.value = projectData.project_fullname;
+                                    projectNameInputprice.value = projectData.project_valueprice;
+                                }
+                            });
+
+                        });
+
+                        // multi insrt
+                        function addInputFields() {
+                            const table = document.querySelector('table');
+
+                            // Check if a tbody element exists, and create one if it doesn't
+                            let tbody = table.querySelector('tbody');
+                            if (!tbody) {
+                                tbody = document.createElement('tbody');
+                                table.appendChild(tbody);
+                            }
+
+                            const newRow = document.createElement('tr');
+
+                            const fieldNames = ['s_id', 'qty', 's_price', 'totalprice'];
+                            const field_holder = ['รหัสสินค้า', 'จำนวน', 'ราคา/หน่วย', 'จำนวนเงิน'];
+
+                            for (let i = 0; i < fieldNames.length; i++) {
+                                const newCell = document.createElement('td');
+                                const newInput = document.createElement('input');
+                                newInput.type = 'text';
+                                newInput.name = `${fieldNames[i]}[]`;
+                                newInput.className = 'form-control';
+                                newInput.placeholder = `${field_holder[i]}`;
+                                newCell.appendChild(newInput);
+                                newRow.appendChild(newCell);
+                            }
+
+                            tbody.appendChild(newRow);
+                        }
                     </script>
 
                     <script>
