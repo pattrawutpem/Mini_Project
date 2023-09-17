@@ -59,12 +59,13 @@ if ($case == '1') {
                     <div class="row">
                         <div class="col-12 order-2 order-md-3 order-lg-2 mb-4">
                             <div class="card mb-3">
+                                <div class="text-end mt-3 me-3">NO.
+                                    <?php echo ($case == 4) ? $no['no_'] : '' ?>
+                                </div>
                                 <div class="card-header text-center">
                                     <h3><?php echo $header; ?></h3>
                                 </div>
-                                <div class="">
-                                    <?php echo ($case == 4) ? $no['no_'] : '' ?>
-                                </div>
+
                                 <div class="card-body">
                                     <form id="formAccountSettings" action="../../API/api_receipt.php?xCase=<?php echo $case ?>&id=<?php echo $id ?>" method="POST">
                                         <div class="row">

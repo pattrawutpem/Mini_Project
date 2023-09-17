@@ -34,16 +34,16 @@ include("header.php");
                                     <div class="inner">
                                         <h3 class="text-white " style="font-weight: 600;">
                                             <?php
-                                            $result = mysqli_query($conn, 'SELECT SUM(subtotal) AS value_sum FROM invoices WHERE status = "paid"');
+                                            $result = mysqli_query($conn, 'SELECT SUM(cus_id) AS cus FROM customer WHERE void = 0');
                                             $row = mysqli_fetch_assoc($result);
-                                            $sum = $row['value_sum'];
+                                            $sum = $row['cus'];
                                             echo $sum;
                                             ?>
                                         </h3>
                                     </div>
-                                    <h5 class="text-white">Sales Amount</h5>
+                                    <h5 class="text-white">จำนวนลูกค้า</h5>
                                     <div class="icon">
-                                        <i class="fa-solid fa-dollar-sign"></i>
+                                        <i class="fa-solid fa-address-card"></i>
                                     </div>
 
                                 </div>
@@ -56,17 +56,17 @@ include("header.php");
                                         <h3 class="text-white " style="font-weight: 600;">
                                             <?php
 
-                                            $sql = "SELECT * FROM invoices";
+                                            $sql = "SELECT count(emp_id) FROM employee where void =0";
                                             $query = $conn->query($sql);
 
                                             echo "$query->num_rows";
                                             ?></h3>
 
-                                        <h5 class="text-white">Total Invoices</h5>
+                                        <h5 class="text-white">จำนวนพนักงาน</h5>
 
                                     </div>
                                     <div class="icon">
-                                        <i class="fa-solid fa-print"></i>
+                                        <i class="fa-duotone fa-user-tie"></i>
                                     </div>
 
                                 </div>
@@ -79,16 +79,16 @@ include("header.php");
                                         <h3 class="text-white " style="font-weight: 600;">
                                             <?php
 
-                                            $sql = "SELECT * FROM invoices WHERE status = 'open'";
+                                            $sql = "SELECT count(project_id) FROM project WHERE void = 0";
                                             $query = $conn->query($sql);
 
                                             echo "$query->num_rows";
                                             ?></h3>
 
-                                        <h5 class="text-white">Pending Bills</h5>
+                                        <h5 class="text-white">จำนวนโครงการ</h5>
                                     </div>
                                     <div class="icon">
-                                        <i class="fa-duotone fa-loader"></i>
+                                        <i class="fa-solid fa-list-check"></i>
                                     </div>
 
                                 </div>
@@ -100,16 +100,16 @@ include("header.php");
                                     <div class="inner">
                                         <h3 class="text-white " style="font-weight: 600;">
                                             <?php
-                                            $result = mysqli_query($conn, 'SELECT SUM(subtotal) AS value_sum FROM invoices WHERE status = "open"');
+                                            $result = mysqli_query($conn, 'SELECT SUM(s_id) AS value_sum FROM stock WHERE void = 0');
                                             $row = mysqli_fetch_assoc($result);
                                             $sum = $row['value_sum'];
                                             echo $sum;
                                             ?></h3>
 
-                                        <h5 class="text-white">Due Amount</h5>
+                                        <h5 class="text-white">จำนวนสินค้า</h5>
                                     </div>
                                     <div class="icon">
-                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                        <i class="fa-sharp fa-solid fa-boxes-stacked"></i>
                                     </div>
 
                                 </div>
@@ -126,16 +126,16 @@ include("header.php");
                                     <div class="inner">
                                         <h3 class="text-white " style="font-weight: 600;">
                                             <?php
-                                            $sql = "SELECT * FROM products WHERE void = 0 ";
+                                            $sql = "SELECT * FROM `project_hd` JOIN project_desc USING(headcode) WHERE project_hd.void =0";
                                             $query = $conn->query($sql);
 
                                             echo "$query->num_rows";
                                             ?></h3>
 
-                                        <h5 class="text-white">Total Products</h5>
+                                        <h5 class="text-white">ใบเสร็จ</h5>
                                     </div>
                                     <div class="icon">
-                                        <i class="fa-brands fa-dropbox"></i>
+                                        <i class="fa-solid fa-receipt"></i>
                                     </div>
 
                                 </div>
@@ -147,38 +147,17 @@ include("header.php");
                                     <div class="inner">
                                         <h3 class="text-white " style="font-weight: 600;">
                                             <?php
-                                            $sql = "SELECT * FROM store_customers";
+                                            $sql = "SELECT count(headcode) FROM project_close where void = 0";
                                             $query = $conn->query($sql);
 
                                             echo "$query->num_rows";
                                             ?></h3>
 
-                                        <h5 class="text-white">Total Customers</h5>
+                                        <h5 class="text-white">จำนวนโครงการที่ปิด</h5>
                                     </div>
 
                                     <div class="icon">
-                                        <i class="fa-solid fa-users"></i>
-                                    </div>
-
-                                </div>
-                            </div>
-
-                            <div class="col-lg-3 col-xs-6">
-                                <!-- small box -->
-                                <div class="small-box" style="background-color:darkcyan">
-                                    <div class="inner">
-                                        <h3 class="text-white " style="font-weight: 600;">
-                                            <?php
-                                            $sql = "SELECT * FROM invoices WHERE status = 'paid'";
-                                            $query = $conn->query($sql);
-
-                                            echo "$query->num_rows";
-                                            ?></h3>
-
-                                        <h5 class="text-white">Paid Bills</h5>
-                                    </div>
-                                    <div class="icon">
-                                        <i class="fa-regular fa-newspaper"></i>
+                                        <i class="fa-solid fa-subtitles"></i>
                                     </div>
 
                                 </div>
