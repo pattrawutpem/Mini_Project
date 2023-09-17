@@ -248,6 +248,9 @@ if ($case == '1') {
                                 newInput.name = `${fieldNames[i]}[]`;
                                 newInput.className = `form-control ${fieldNames[i]}`;
                                 newInput.placeholder = `${field_holder[i]}`;
+                                if (fieldNames[i] === 'totalprice') {
+                                    newInput.readOnly = true;
+                                }
                                 newCell.appendChild(newInput);
                                 newRow.appendChild(newCell);
 

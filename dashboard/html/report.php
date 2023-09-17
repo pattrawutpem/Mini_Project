@@ -53,9 +53,9 @@ $pdf->SetFont('angsa', '', 9);
 $pdf->SetDrawColor(0, 0, 0);
 
 
-$query = mysqli_query($conn, "select * from project_hd");
+$query = mysqli_query($conn, "SELECT * FROM `project_hd` JOIN project USING(project_id) JOIN customer USING(cus_id) WHERE project_hd.void = 0");
 while ($data = mysqli_fetch_array($query)) {
-    $pdf->Cell(40, 5, $data['product_name'], 1, 0);
+    $pdf->Cell(40, 5, $data['headcode'], 1, 0);
     $pdf->Cell(85, 5, $data['datesave'], 1, 0);
     $pdf->Cell(85, 5, $data['receiptcode'], 1, 0);
     $pdf->Cell(85, 5, $data['datereceipt'], 1, 0);
