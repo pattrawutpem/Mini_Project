@@ -109,6 +109,28 @@ if ($case == '1') {
                                                 <input type="text" class="form-control" name="totalprice" id="project_price_display" readonly>
                                             </div>
                                         </div>
+                                       
+                                        <table class="table my-2">
+                                            <thead>
+                                                <tr>
+                                                    <th>รหัสสินค้า</th>
+                                                    <th>จำนวน</th>
+                                                    <th>ราคา/หน่วย</th>
+                                                    <th>จำนวนเงิน</th>
+                                                    <th><button type="button" class="btn btn-info" onclick="addInputFields()">เพิ่ม</button></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td><input type="text" class="form-control" name="s_id[]" placeholder="รหัสสินค้า"></td>
+                                                    <td><input type="text" class="form-control" name="qty[]" placeholder="จำนวน"></td>
+                                                    <td><input type="text" class="form-control" name="s_price[]" placeholder="ราคา/หน่วย"></td>
+                                                    <td><input type="text" class="form-control" name="totalprice[]" placeholder="จำนวนเงิน"></td>
+                                                    
+                                                </tr>
+                                            </tbody>
+
+                                        </table>
                                         <div class="mt-2">
                                             <?php
                                             echo ($case == '1') ?
@@ -123,29 +145,7 @@ if ($case == '1') {
                                 </div>
 
                             </div>
-                            <div class="card">
-                                <div class="card-body">
-                                <form id="formAccountSettings" action="../../API/api_receipt.php?xCase=1&id=1" method="POST">
-                                <button type="button" onclick="addInputFields()">Add Row</button>
-                                    <table>
-                                        <tr>
-                                            <th>รหัสสินค้า</th>
-                                            <th>จำนวน</th>
-                                            <th>ราคา/หน่วย</th>
-                                            <th>จำนวนเงิน</th>
-                                        </tr>
-                                        <tr>
-                                            <td><input type="text" name="s_id[]" placeholder="Enter an item"></td>
-                                            <td><input type="text" name="qty[]" placeholder="Enter data"></td>
-                                            <td><input type="text" name="s_price[]" placeholder="Enter header"></td>
-                                            <td><input type="text" name="totalprice[]" placeholder="Enter description"></td>
-                                        </tr>
-                                    </table>
 
-                                    <button type="submit" name="submit" value="Submit">submit</button>
-                                    </form>
-                                </div>
-                            </div>
                             <!--/ Total Revenue -->
                         </div>
                     </div>
@@ -182,21 +182,31 @@ if ($case == '1') {
                         // multi insrt
                         function addInputFields() {
                             const table = document.querySelector('table');
+
+                            // Check if a tbody element exists, and create one if it doesn't
+                            let tbody = table.querySelector('tbody');
+                            if (!tbody) {
+                                tbody = document.createElement('tbody');
+                                table.appendChild(tbody);
+                            }
+
                             const newRow = document.createElement('tr');
 
                             const fieldNames = ['s_id', 'qty', 's_price', 'totalprice'];
+                            const field_holder = ['รหัสสินค้า', 'จำนวน', 'ราคา/หน่วย', 'จำนวนเงิน'];
 
                             for (let i = 0; i < fieldNames.length; i++) {
                                 const newCell = document.createElement('td');
                                 const newInput = document.createElement('input');
                                 newInput.type = 'text';
                                 newInput.name = `${fieldNames[i]}[]`;
-                                newInput.placeholder = `Enter ${fieldNames[i]}`;
+                                newInput.className = 'form-control';
+                                newInput.placeholder = `${field_holder[i]}`;
                                 newCell.appendChild(newInput);
                                 newRow.appendChild(newCell);
                             }
 
-                            table.appendChild(newRow);
+                            tbody.appendChild(newRow);
                         }
                     </script>
 
