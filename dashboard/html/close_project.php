@@ -7,18 +7,14 @@ include("header.php"); ?>
 <!-- Layout wrapper -->
 <div class="layout-wrapper layout-content-navbar">
     <div class="layout-container">
-
         <!-- Menu -->
         <?php include("sidebar.php") ?>
         <!-- / Menu -->
-
         <!-- Layout container -->
         <div class="layout-page">
-
             <!-- Navbar -->
             <?php include("topbar.php"); ?>
             <!-- / Navbar -->
-
             <!-- Content wrapper -->
             <div class="content-wrapper">
                 <!-- Content -->
@@ -36,7 +32,7 @@ include("header.php"); ?>
                         <div class="col-12 order-2 order-md-3 order-lg-2 mb-4">
                             <div class="card">
                                 <div class="card-header">
-                                    <a href="crud_close.php?xCase=1" class="btn btn-primary"><i class="fa-solid fa-plus me-2"></i>Add</a>
+                                    <a href="crud_close.php?xCase=1" class="btn btn-primary"><i class="fa-solid fa-plus me-2"></i>เพิ่มข้อมูล</a>
                                 </div>
                                 <div class="">
                                     <div class="card-body">
@@ -49,7 +45,7 @@ include("header.php"); ?>
                                                     <th>ต้นทุน</th>
                                                     <th>ค่าใช้จ่าย</th>
                                                     <th>หมายเหตุ</th>
-                                                    <th class="text-center" style="width: 200px;">Action</th>
+                                                    <th class="text-center" style="width: 200px;">จัดการ</th>
                                                 </tr>
                                             </thead>
                                             <tbody>

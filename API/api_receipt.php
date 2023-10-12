@@ -14,14 +14,30 @@ switch ($case) {
         $project_id = $_POST['project_id'];
         $totalprice = $_POST['totalprice'];
 
-        $maxID = mysqli_query($conn, "SELECT MAX(headcode) AS id FROM project_hd ORDER BY headcode");
-        if (mysqli_num_rows($maxID) > 0) {
-            while ($row = mysqli_fetch_assoc($maxID)) {
-                $id = $row['id'] + 1;
+        $dateTime = new DateTime();
+        $currentDateTime = $dateTime->format('Y-m-d H:i:s');
+        $timestamp = $dateTime->getTimestamp();
+        $day = date("d", $timestamp);
+        $month = date("m", $timestamp);
+        $year = substr(date("Y", $timestamp), -2);
+
+        $no = 1;
+
+        $sql = "SELECT MAX(headcode) AS id FROM project_hd";
+        $objQuery = mysqli_query($conn, $sql);
+        while ($objResult = mysqli_fetch_array($objQuery)) {
+            if ($objResult["id"] !== null) {
+                $no = (string)((int)$objResult["id"] + 1); // แปลงค่าให้เป็นชนิดข้อมูล BIGINT (string)
             }
         }
-        //multi insert detail
+
+        $docno = "0000" . $no; // เอาเลข 0 เติมให้ครบ 4 หลัก
+        $docno = substr($docno, -4); // เอาเฉพาะ 4 ตัวหลัง
+        $docno = $year . $month . $docno; // เลขที่เอกสารใหม่ คือ YYMMตามด้วยเลขที่
+
+
         if (!empty($_POST['s_id'])) {
+            $no = $year . $month . str_pad($id, 4, '0', STR_PAD_LEFT);
             $s_ids = $_POST['s_id'];
             $qtys = $_POST['qty'];
             $s_prices = $_POST['s_price'];
@@ -31,22 +47,14 @@ switch ($case) {
                 $qty = $qtys[$i];
                 $s_price = $s_prices[$i];
                 $totalprice = $totalprices[$i];
-                // Sanitize the input (to prevent SQL injection)
-                // $s_id = $conn->real_escape_string($s_id);
-                // Perform the SQL insert
-                // echo "s_id =" . $s_id ."<br>";
-                // echo "qtys =" . $qtys ."<br>";
-                // echo "s_price =" . $s_price ."<br>";
-                // echo "totalprice =" . $totalprice ."<br>";
-                $sql = "INSERT INTO project_desc (headcode, s_id, qty, s_price, totalprice) VALUES ('$id', '$s_id', '$qty', '$s_price', '$totalprice')";
+                $sql = "INSERT INTO project_desc (headcode, s_id, qty, s_price, totalprice) VALUES ('$docno', '$s_id', '$qty', '$s_price', '$totalprice')";
                 if ($conn->query($sql) !== TRUE) {
                     echo "Error: " . $sql . "<br>" . $conn->error;
                 }
             }
         }
 
-
-        $spl = mysqli_query($conn, "INSERT INTO project_hd VALUES ('$id','$datesave','$receiptcode','$datereceipt','$project_id','$totalprice', 1 ,0)");
+        $spl = mysqli_query($conn, "INSERT INTO project_hd (headcode, datesave, receiptcode, datereceipt, project_id, totalprice, status, void) VALUES ('$docno','$datesave','$receiptcode','$datereceipt','$project_id','$totalprice', 1 ,0)");
         if (!$spl) {
             echo json_encode(array('title' => 'Unsuccessfully!', 'status' => 'error', 'message' => 'Inserted data is not success.'));
         } else {
@@ -105,5 +113,31 @@ switch ($case) {
             echo json_encode($projectData);
         } else {
             echo "ไม่สามารถดึงข้อมูลโครงการได้: " . mysqli_error($conn);
+        }
+        break;
+    case 5:
+        $s_id = mysqli_real_escape_string($conn, $_GET['id']);
+
+        // SQL query to fetch project details
+        $sql = "SELECT * FROM `stock` WHERE s_id = '$s_id' AND void = 0 ";
+        $result = mysqli_query($conn, $sql);
+
+        if ($result) {
+            $row = mysqli_fetch_assoc($result);
+            $s_name = $row['s_name'];
+            $s_unit = $row['s_unit'];
+            $s_price = $row['s_price'];
+
+            // Create an array to hold project data and echo it as JSON
+            $stockData = [
+                's_id' => $s_id,
+                's_name' => $s_name,
+                's_unit' => $s_unit,
+                's_price' => $s_price
+            ];
+
+            echo json_encode($stockData);
+        } else {
+            echo "ไม่สามารถดึงข้อมูลสินค้าได้: " . mysqli_error($conn);
         }
 }

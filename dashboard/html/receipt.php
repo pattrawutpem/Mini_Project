@@ -26,8 +26,7 @@ include("header.php"); ?>
                     <!-- Content Header (Page header) -->
                     <div class="content-header">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item active"><a href="receipt.php" class="text-decolation">System
-                            Receipt</a></li>
+                            <li class="breadcrumb-item active"><a href="receipt.php" class="text-decolation">ข้อมูลค่าใช้จ่ายโครงการ</a></li>
                             <!-- <li class="breadcrumb-item">Manage Users</li> -->
                         </ol>
                     </div>
@@ -36,7 +35,7 @@ include("header.php"); ?>
                         <div class="col-12 order-2 order-md-3 order-lg-2 mb-4">
                             <div class="card">
                                 <div class="card-header">
-                                    <a href="crud_receipt.php?xCase=1" class="btn btn-primary"><i class="fa-solid fa-plus me-2"></i>Add Receipt</a>
+                                    <a href="crud_receipt.php?xCase=1" class="btn btn-primary"><i class="fa-solid fa-plus me-2"></i>เพิ่มข้อมูล</a>
                                 </div>
                                 <div class="">
                                     <div class="card-body">
@@ -46,7 +45,7 @@ include("header.php"); ?>
                                                     <th class="text-center">#</th>
                                                     <th width="150px">ชื่อโครงการ</th>
                                                     <th >สถานะ</th>
-                                                    <th class="text-center" style="width: 200px;">Action</th>
+                                                    <th class="text-center" style="width: 200px;">จัดการ</th>
                                                 </tr>
                                             </thead>
                                             <tbody>

@@ -6,7 +6,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
     <div class="app-brand demo">
         <a href="dashboard.php" class="app-brand-link">
-            <span class="app-brand-text demo menu-text fw-bolder ms-2">Dashboard</span>
+            <span class="app-brand-text demo menu-text fw-bolder ms-2">แผงควบคุม</span>
         </a>
 
         <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
@@ -20,19 +20,19 @@ $currentPage = basename($_SERVER['PHP_SELF']);
         <!-- Dashboard -->
         <li class="menu-item <?php echo ($currentPage == 'product.php' || $currentPage == '') ? "active" : ""; ?>">
             <a href="product.php" class="menu-link">
-                <i class="menu-icon fa-light fa-file-invoice"></i>
+                <i class="menu-icon fa-light fa-box-taped"></i>
                 <div data-i18n="Authentications">ข้อมูลรายสินค้า</div>
             </a>
         </li>
         <li class="menu-item <?php echo ($currentPage == 'project.php' || $currentPage == '') ? "active" : ""; ?>">
             <a href="project.php" class="menu-link">
-                <i class="menu-icon fa-light fa-file-invoice"></i>
+                <i class="menu-icon fa-light fa-diagram-project"></i>
                 <div data-i18n="Authentications">ข้อมูลโครงการ</div>
             </a>
         </li>
         <li class="menu-item <?php echo ($currentPage == 'receipt.php' || $currentPage == '') ? "active" : ""; ?>">
             <a href="receipt.php" class="menu-link">
-                <i class="menu-icon fa-light fa-file-invoice"></i>
+                <i class="menu-icon fa-light fa-money-check-dollar"></i>
                 <div data-i18n="Authentications">ข้อมูลค่าใช้จ่ายโครงการ</div>
             </a>
         </li>
@@ -44,7 +44,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
         </li>
         <li class="menu-item <?php echo ($currentPage == 'employee.php' || $currentPage == '') ? "active" : ""; ?>">
             <a href="employee.php" class="menu-link">
-                <i class="menu-icon fa-light fa-box-taped"></i>
+                <i class="menu-icon fa-user-tie"></i>
                 <div data-i18n="Authentications">ข้อมูลพนักงาน</div>
             </a>
         <li class="menu-item <?php echo ($currentPage == 'customer.php' || $currentPage == '') ? "active" : ""; ?>">

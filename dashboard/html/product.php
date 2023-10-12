@@ -26,8 +26,7 @@ include("header.php"); ?>
                     <!-- Content Header (Page header) -->
                     <div class="content-header">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item active"><a href="customer.php" class="text-decolation">System
-                                    Product</a></li>
+                            <li class="breadcrumb-item active"><a href="customer.php" class="text-decolation">ข้อมูลสินค้า</a></li>
                             <!-- <li class="breadcrumb-item">Manage Users</li> -->
                         </ol>
                     </div>
@@ -36,7 +35,7 @@ include("header.php"); ?>
                         <div class="col-12 order-2 order-md-3 order-lg-2 mb-4">
                             <div class="card">
                                 <div class="card-header">
-                                    <a href="crud_product.php?xCase=1" class="btn btn-primary"><i class="fa-solid fa-plus me-2"></i>Add Product</a>
+                                    <a href="crud_product.php?xCase=1" class="btn btn-primary"><i class="fa-solid fa-plus me-2"></i>เพิ่มสินค้า</a>
                                 </div>
                                 <div class="">
                                     <div class="card-body">
@@ -47,7 +46,7 @@ include("header.php"); ?>
                                                     <th width="150px">สินค้า</th>
                                                     <th>หน่วยนับ</th>
                                                     <th>ราคา/หน่วย</th>
-                                                    <th class="text-center" style="width: 200px;">Action</th>
+                                                    <th class="text-center" style="width: 200px;">จัดการ</th>
                                                 </tr>
                                             </thead>
                                             <tbody>

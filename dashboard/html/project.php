@@ -26,8 +26,7 @@ include("header.php"); ?>
                     <!-- Content Header (Page header) -->
                     <div class="content-header">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item active"><a href="customer.php" class="text-decolation">System
-                                    Project</a></li>
+                            <li class="breadcrumb-item active"><a href="customer.php" class="text-decolation">ข้อมูลโครงการ</a></li>
                             <!-- <li class="breadcrumb-item">Manage Users</li> -->
                         </ol>
                     </div>
@@ -37,7 +36,7 @@ include("header.php"); ?>
                             <div class="card">
                                 <div class="card-header">
                                     <a href="crud_project.php?xCase=1" class="btn btn-primary"><i
-                                            class="fa-solid fa-plus me-2"></i>Add Project</a>
+                                            class="fa-solid fa-plus me-2"></i>เพิ่มข้อมูล</a>
                                 </div>
                                 <div class="">
                                     <div class="card-body">
@@ -50,7 +49,7 @@ include("header.php"); ?>
                                                     <th>วันที่สิ้นสุดโครงการ</th>
                                                     <th>มูลค่าโครงการ</th>
                                                     <th>สถานะโครงการ</th>
-                                                    <th class="text-center" style="width: 200px;">Action</th>
+                                                    <th class="text-center" style="width: 200px;">จัดการ</th>
                                                 </tr>
                                             </thead>
                                             <tbody>

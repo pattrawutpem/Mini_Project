@@ -3,16 +3,16 @@ include("header.php");
 
 $case = $_GET['xCase'];
 if ($case == '1') {
-    $header = 'Add';
+    $header = 'เพิ่ม';
     $id = '';
 } else if ($case  == '2') {
-    $header = 'Edit';
+    $header = 'แก้ไข';
     $id = $_GET['id'];
     $result = mysqli_query($conn, "SELECT * FROM stock WHERE s_id ='$id' ");
     $row = mysqli_fetch_array($result);
     // print_r(md5($row['password']));
 } else if ($case  == '3') {
-    $header = 'Delete';
+    $header = 'ลบ';
     $id = $_GET['id'];
     $result = mysqli_query($conn, "SELECT * FROM stock WHERE s_id ='$id' ");
     $row = mysqli_fetch_array($result);
@@ -41,12 +41,11 @@ if ($case == '1') {
                     <!-- Content Header (Page header) -->
                     <div class="content-header">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item active"><a href="product.php" class="text-decolation">System
-                                    Product</a>
+                            <li class="breadcrumb-item active"><a href="product.php" class="text-decolation">ข้อมูลสินค้า</a>
                             </li>
                             <!-- <li class="breadcrumb-item active"><a href="magUsers.php" class="text-decolation">Manage
                                     User</a></li> -->
-                            <li class="breadcrumb-item"><?php echo $header; ?> Product</li>
+                            <li class="breadcrumb-item"><?php echo $header; ?>ข้อมูลสินค้า</li>
                         </ol>
                     </div>
                     <!-- /.content-header -->
@@ -54,18 +53,18 @@ if ($case == '1') {
                         <div class="col-12 order-2 order-md-3 order-lg-2 mb-4">
                             <div class="card">
                                 <div class="card-header text-center">
-                                    <h3><?php echo $header; ?> Product</h3>
+                                    <h3><?php echo $header; ?>ข้อมูลสินค้า</h3>
                                 </div>
                                 <div class="card-body">
                                     <form id="formAccountSettings" action="../../API/api_product.php?xCase=<?php echo $case ?>&id=<?php echo $id ?>" method="POST">
                                         <div class="row">
                                             <div class="mb-2 col-lg-4 col-md-6 col-ms-12">
                                                 <label for="s_name" class="form-label">สินค้า</label>
-                                                <input type="text" class="form-control" name="s_name" id="s_name" placeholder="Enter product name" value="<?php echo ($case == 1) ? '' : $row['s_name'] ?>" <?php echo ($case == '3') ? 'readonly' : 'required' ?>>
+                                                <input type="text" class="form-control" name="s_name" id="s_name" placeholder="สินค้า" value="<?php echo ($case == 1) ? '' : $row['s_name'] ?>" <?php echo ($case == '3') ? 'readonly' : 'required' ?>>
                                             </div>
                                             <div class="mb-2 col-lg-4 col-md-6 col-ms-12">
                                                 <label for="s_unit" class="form-label">หน่วยนับ</label>
-                                                <input type="text" class="form-control" name="s_unit" id="s_unit" placeholder="Enter Product description" value="<?php echo ($case == 1) ? '' : $row['s_unit'] ?>" <?php echo ($case == '3') ? 'readonly' : 'required' ?>>
+                                                <input type="text" class="form-control" name="s_unit" id="s_unit" placeholder="หน่วยนับ" value="<?php echo ($case == 1) ? '' : $row['s_unit'] ?>" <?php echo ($case == '3') ? 'readonly' : 'required' ?>>
                                             </div>
                                             <div class="mb-2 col-lg-4 col-md-6 col-ms-12">
                                                 <label for="s_price" class="form-label">ราคา/หน่วย</label>
@@ -75,12 +74,12 @@ if ($case == '1') {
                                         <div class="mt-2">
                                             <?php
                                             echo ($case == '1') ?
-                                                '<button type="submit" name="submit_pro" class="btn btn-success">Save</button> ' : (($case == '2') ?
-                                                    '<button type="submit" name="submit_pro" class="btn btn-warning">Edit</button>' : (($case == '3') ?
-                                                        '<button type="submit" name="submit_pro" class="btn btn-danger">Delete</button>' : ''))
+                                                '<button type="submit" name="submit_pro" class="btn btn-success">บันทึก</button> ' : (($case == '2') ?
+                                                    '<button type="submit" name="submit_pro" class="btn btn-warning">แก้ไข</button>' : (($case == '3') ?
+                                                        '<button type="submit" name="submit_pro" class="btn btn-danger">ลบ</button>' : ''))
                                             ?>
                                             <!-- <button type="submit" name="submit" class="btn btn-success">บันทึก</button> -->
-                                            <a href="product.php" class="btn btn-secondary ms-3">Cancel</a>
+                                            <a href="product.php" class="btn btn-secondary ms-3">ยกเลิก</a>
                                         </div>
                                     </form>
 

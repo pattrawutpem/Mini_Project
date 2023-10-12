@@ -3,16 +3,16 @@ include("header.php");
 
 $case = $_GET['xCase'];
 if ($case == '1') {
-    $header = 'Add';
+    $header = 'เพิ่ม';
     $id = '';
 } else if ($case  == '2') {
-    $header = 'Edit';
+    $header = 'แก้ไข';
     $id = $_GET['id'];
     $result = mysqli_query($conn, "SELECT * FROM customer WHERE cus_id ='$id' ");
     $row = mysqli_fetch_array($result);
     // print_r(md5($row['password']));
 } else if ($case  == '3') {
-    $header = 'Delete';
+    $header = 'ลบ';
     $id = $_GET['id'];
     $result = mysqli_query($conn, "SELECT * FROM customer WHERE cus_id ='$id' ");
     $row = mysqli_fetch_array($result);
@@ -41,12 +41,11 @@ if ($case == '1') {
                     <!-- Content Header (Page header) -->
                     <div class="content-header">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item active"><a href="customer.php" class="text-decolation">System
-                                    Customer</a>
+                            <li class="breadcrumb-item active"><a href="customer.php" class="text-decolation">ข้อมูลลูกค้า</a>
                             </li>
                             <!-- <li class="breadcrumb-item active"><a href="magUsers.php" class="text-decolation">Manage
                                     User</a></li> -->
-                            <li class="breadcrumb-item"><?php echo $header; ?> Customer</li>
+                            <li class="breadcrumb-item"><?php echo $header; ?>ข้อมูลลูกค้า</li>
                         </ol>
                     </div>
                     <!-- /.content-header -->
@@ -54,7 +53,7 @@ if ($case == '1') {
                         <div class="col-12 order-2 order-md-3 order-lg-2 mb-4">
                             <div class="card">
                                 <div class="card-header text-center">
-                                    <h3><?php echo $header; ?> Customer</h3>
+                                    <h3><?php echo $header; ?>ข้อมูลลูกค้า</h3>
                                 </div>
                                 <div class="card-body">
                                     <form id="formAccountSettings" action="../../API/api_customer.php?xCase=<?php echo $case ?>&id=<?php echo $id ?>" method="POST">
@@ -99,12 +98,12 @@ if ($case == '1') {
                                         <div class="mt-2">
                                             <?php
                                             echo ($case == '1') ?
-                                                '<button type="submit" name="submit_frm" class="btn btn-success">Save</button> ' : (($case == '2') ?
-                                                    '<button type="submit" name="submit_frm" class="btn btn-warning">Edit</button>' : (($case == '3') ?
-                                                        '<button type="submit" name="submit_frm" class="btn btn-danger">Delete</button>' : ''))
+                                                '<button type="submit" name="submit_frm" class="btn btn-success">บันทึก</button> ' : (($case == '2') ?
+                                                    '<button type="submit" name="submit_frm" class="btn btn-warning">แก้ไข</button>' : (($case == '3') ?
+                                                        '<button type="submit" name="submit_frm" class="btn btn-danger">ลบ</button>' : ''))
                                             ?>
                                             <!-- <button type="submit" name="submit" class="btn btn-success">บันทึก</button> -->
-                                            <a href="customer.php" class="btn btn-secondary ms-3">Cancel</a>
+                                            <a href="customer.php" class="btn btn-secondary ms-3">ยกเลิก</a>
                                         </div>
                                     </form>
                                 </div>

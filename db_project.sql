@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 17, 2023 at 02:48 PM
+-- Generation Time: Oct 12, 2023 at 09:48 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -20,6 +20,24 @@ SET time_zone = "+00:00";
 --
 -- Database: `db_project`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `account`
+--
+
+CREATE TABLE `account` (
+  `user` varchar(20) NOT NULL,
+  `password` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `account`
+--
+
+INSERT INTO `account` (`user`, `password`) VALUES
+('admin', '1234');
 
 -- --------------------------------------------------------
 
@@ -90,11 +108,11 @@ INSERT INTO `employee` (`emp_id`, `emp_firstname`, `emp_lastname`, `emp_address`
 CREATE TABLE `project` (
   `project_id` int(3) UNSIGNED ZEROFILL NOT NULL,
   `project_name` varchar(255) NOT NULL,
-  `cus_id` int(11) NOT NULL,
+  `cus_id` int(4) UNSIGNED ZEROFILL NOT NULL,
   `project_start` date NOT NULL,
   `project_end` date NOT NULL,
   `project_valueprice` int(11) NOT NULL,
-  `emp_id` int(11) NOT NULL COMMENT 'ผู้ดูแลโครงการ',
+  `emp_id` int(4) UNSIGNED ZEROFILL NOT NULL COMMENT 'ผู้ดูแลโครงการ',
   `project_status` int(1) NOT NULL COMMENT '0 = ยกเลิก, 1 = อยู่ระหว่างดำเนินการ, 2 = ปิดโครงการ',
   `void` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -104,8 +122,9 @@ CREATE TABLE `project` (
 --
 
 INSERT INTO `project` (`project_id`, `project_name`, `cus_id`, `project_start`, `project_end`, `project_valueprice`, `emp_id`, `project_status`, `void`) VALUES
-(001, 'GGG', 1, '2023-09-01', '2023-09-14', 50000, 1, 2, 1),
-(002, 'Shafira Mcfarland', 2, '1972-06-05', '2018-12-27', 818, 1, 2, 0);
+(001, 'GGG', 0001, '2023-09-01', '2023-09-14', 50000, 0001, 1, 1),
+(002, 'Shafira Mcfarland', 0002, '1972-06-05', '2018-12-27', 818, 0001, 2, 0),
+(003, 'Mannix Navarro', 0003, '1980-08-22', '2008-12-09', 366, 0001, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -114,7 +133,7 @@ INSERT INTO `project` (`project_id`, `project_name`, `cus_id`, `project_start`, 
 --
 
 CREATE TABLE `project_close` (
-  `headcode` int(3) UNSIGNED ZEROFILL NOT NULL,
+  `headcode` varchar(8) NOT NULL,
   `dateclose` date NOT NULL,
   `project_id` int(3) UNSIGNED ZEROFILL NOT NULL,
   `cost` int(11) NOT NULL,
@@ -124,13 +143,6 @@ CREATE TABLE `project_close` (
   `void` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `project_close`
---
-
-INSERT INTO `project_close` (`headcode`, `dateclose`, `project_id`, `cost`, `pay`, `emp_id`, `comment`, `void`) VALUES
-(001, '1988-10-01', 001, 5000, 12, 001, 'gggg', 0);
-
 -- --------------------------------------------------------
 
 --
@@ -138,7 +150,7 @@ INSERT INTO `project_close` (`headcode`, `dateclose`, `project_id`, `cost`, `pay
 --
 
 CREATE TABLE `project_desc` (
-  `headcode` int(3) UNSIGNED ZEROFILL NOT NULL,
+  `headcode` varchar(8) NOT NULL,
   `s_id` int(3) UNSIGNED ZEROFILL NOT NULL,
   `qty` int(11) NOT NULL,
   `s_price` int(11) NOT NULL,
@@ -150,9 +162,8 @@ CREATE TABLE `project_desc` (
 --
 
 INSERT INTO `project_desc` (`headcode`, `s_id`, `qty`, `s_price`, `totalprice`) VALUES
-(004, 001, 289, 409, 249),
-(004, 002, 807, 471, 751),
-(004, 003, 753, 72, 395);
+('23100001', 001, 2, 10000, 20000),
+('23100001', 002, 3, 500, 1500);
 
 -- --------------------------------------------------------
 
@@ -161,7 +172,7 @@ INSERT INTO `project_desc` (`headcode`, `s_id`, `qty`, `s_price`, `totalprice`) 
 --
 
 CREATE TABLE `project_hd` (
-  `headcode` int(3) UNSIGNED ZEROFILL NOT NULL,
+  `headcode` varchar(8) NOT NULL,
   `datesave` date NOT NULL,
   `receiptcode` int(3) UNSIGNED ZEROFILL NOT NULL,
   `datereceipt` date NOT NULL,
@@ -176,10 +187,7 @@ CREATE TABLE `project_hd` (
 --
 
 INSERT INTO `project_hd` (`headcode`, `datesave`, `receiptcode`, `datereceipt`, `project_id`, `totalprice`, `status`, `void`) VALUES
-(001, '2019-12-23', 002, '1994-09-23', 001, 50000, 1, 0),
-(002, '1996-01-18', 002, '1970-04-08', 002, 818, 1, 0),
-(003, '1981-06-16', 000, '2018-02-05', 002, 968, 1, 0),
-(004, '1982-12-06', 005, '2011-02-06', 002, 395, 1, 0);
+('23100001', '1987-09-14', 096, '1983-03-14', 003, 1500, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -200,11 +208,18 @@ CREATE TABLE `stock` (
 --
 
 INSERT INTO `stock` (`s_id`, `s_name`, `s_unit`, `s_price`, `void`) VALUES
-(001, 'คอมพิวเตอร์', 'บาท', 10000, 0);
+(001, 'คอมพิวเตอร์', 'เครื่อง', 10000, 0),
+(002, 'เมาส์', 'อัน', 500, 0);
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `account`
+--
+ALTER TABLE `account`
+  ADD PRIMARY KEY (`user`);
 
 --
 -- Indexes for table `customer`
